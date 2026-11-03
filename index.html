@@ -187,9 +187,13 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
 .spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
 @keyframes sp{to{transform:rotate(360deg)}}
 .loading{display:flex;gap:10px;align-items:center;color:var(--muted);padding:12px 0}
-.pw{position:relative}
+.avsm{width:34px;height:34px;border-radius:10px;object-fit:cover;background:var(--e-soft);color:var(--electric-2);display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
 .pwtxt{background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-weight:600;user-select:all}
-.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);cursor:pointer;font-size:12px;font-weight:700}
+.pw{position:relative;display:block}
+.pw .in{width:100%;padding-right:50px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;border-radius:9px}
+.eye:hover{color:var(--ink)} .eye:focus-visible{outline:2px solid var(--electric)}
+.eye svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 </style>
 <!-- ============ LOGIN SUPER ADMIN ============ -->
 <div id="gate" class="gate" hidden>
@@ -223,6 +227,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <a href="#report"><svg class="ic" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>Monitoring report</a>
     <div class="navlbl">Kelola</div>
     <a href="#akun"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></svg>Akun teknisi</a>
+    <a href="#tambah"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></svg>Tambah akun</a>
     <a href="#area"><svg class="ic" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Area &amp; stasiun</a>
     <a href="#profil"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Profil &amp; password</a>
   </nav>
@@ -268,7 +273,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <div class="card"><div class="row"><h2>Peta lokasi absensi</h2><span class="spacer"></span><span id="aN" class="count"></span></div><div id="aMap" class="map" style="margin-top:12px"></div></div>
     <div class="card" style="padding:0">
       <div class="tablewrap" style="border:0">
-        <table><thead><tr><th>Foto</th><th>Nama teknisi</th><th>Username</th><th>Tanggal</th><th>Jam</th><th>Lokasi GPS</th><th>Koordinat</th><th>Area terdekat</th><th>Status</th></tr></thead><tbody id="aBody"></tbody></table>
+        <table><thead><tr><th>Foto</th><th>Nama teknisi</th><th>Username</th><th>Tanggal</th><th>Jam</th><th>Lokasi GPS</th><th>Koordinat</th><th>Area terdekat</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="aBody"></tbody></table>
       </div>
     </div>
   </section>
@@ -295,27 +300,31 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
   </section>
 
   <!-- AKUN -->
-  <section id="pAkun" class="page g2b" hidden>
-    <form id="fAkun" class="card stack" novalidate>
-      <h2 id="akTitle">Buat akun teknisi</h2>
+  <section id="pAkun" class="page" hidden>
+    <div class="card" style="padding:0">
+      <div class="row" style="padding:16px 20px 12px"><h2>Daftar akun</h2><span id="akN" class="count"></span><span class="spacer"></span><a class="btn pri" href="#tambah">+ Tambah akun</a></div>
+      <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
+        <table><thead><tr><th>Nama lengkap</th><th>Username</th><th>Password</th><th>Role</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="akBody"></tbody></table>
+      </div>
+    </div>
+    <p class="sub">Menonaktifkan akun langsung mengeluarkan teknisi dari APK dan ia tidak bisa login sampai diaktifkan lagi. Riwayat absensi &amp; report tetap tersimpan.</p>
+  </section>
+
+  <!-- TAMBAH / EDIT AKUN -->
+  <section id="pTambah" class="page" hidden>
+    <form id="fAkun" class="card stack" novalidate style="max-width:640px">
+      <h2 id="akTitle">Tambah akun teknisi</h2>
       <p class="sub">Akun langsung bisa dipakai login di aplikasi teknisi.</p>
       <label class="f">Nama lengkap <input id="akNama" class="in" maxlength="80" autocomplete="off"></label>
       <label class="f">Username <input id="akUser" class="in mono" maxlength="30" autocomplete="off" autocapitalize="none" placeholder="tanpa spasi"></label>
-      <label class="f"><span id="akPassLbl">Password (min. 6 karakter)</span>
-        <span class="pw"><input id="akPass" class="in mono" type="password" maxlength="60" autocomplete="new-password" style="width:100%;padding-right:64px"><button type="button" id="akEye">Lihat</button></span></label>
+      <label class="f"><span id="akPassLbl">Password (min. 6 karakter)</span><input id="akPass" class="in mono" type="password" maxlength="60" autocomplete="new-password"></label>
       <div class="row">
         <label class="f" style="flex:1">Role akun <select id="akRole" class="in"><option value="teknisi">Teknisi</option><option value="superadmin">Super Admin</option></select></label>
         <label class="f" style="flex:1">Status akun <select id="akAktif" class="in"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
       </div>
-      <div class="row"><button class="btn pri" type="submit">Simpan akun</button><button id="akBatal" class="btn" type="button" hidden>Batal edit</button></div>
-      <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Super Admin di daftar akun. Akun lama tampil "belum tersedia" sampai pemiliknya login sekali atau password-nya diatur ulang. Menonaktifkan akun atau mengganti password membuat akun tersebut keluar dari aplikasi.</p>
+      <div class="row"><button class="btn pri" type="submit">Simpan akun</button><a class="btn" href="#akun" id="akBatal">Batal</a></div>
+      <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Super Admin di daftar akun.</p>
     </form>
-    <div class="card" style="padding:0">
-      <div class="row" style="padding:16px 20px 12px"><h2>Daftar akun</h2><span class="spacer"></span><span id="akN" class="count"></span></div>
-      <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
-        <table><thead><tr><th>Nama lengkap</th><th>Username</th><th>Password</th><th>Role</th><th>Status</th><th>Dibuat</th><th></th></tr></thead><tbody id="akBody"></tbody></table>
-      </div>
-    </div>
   </section>
 
   <!-- AREA -->
@@ -437,7 +446,7 @@ function stempel(){ $('#upd').textContent = 'Diperbarui ' + fJamD.format(new Dat
 
 /* ================= NAVIGASI ================= */
 const PAGES = {ringkasan:['Dashboard', muatRingkasan], absensi:['Monitoring absensi', muatAbsensi], report:['Monitoring report', muatReport],
-               akun:['Akun teknisi', () => muatAkun()], area:['Area & stasiun', bukaArea], profil:['Profil & password', () => {}]};
+               akun:['Akun teknisi', () => muatAkun()], tambah:['Tambah akun', bukaTambah], area:['Area & stasiun', bukaArea], profil:['Profil & password', () => {}]};
 const halaman = () => PAGES[location.hash.slice(1)] ? location.hash.slice(1) : 'ringkasan';
 window.addEventListener('hashchange', route);
 function route(){
@@ -524,8 +533,8 @@ function renderAbsensi(){
     <td class="wrapcell">${esc(a.alamat || '-')}</td>
     <td class="num"><a href="${gmaps(a.lat, a.lng)}" target="_blank" rel="noopener">${a.lat.toFixed(6)}, ${a.lng.toFixed(6)}</a></td>
     <td>${a.lokasi_nama ? esc(a.lokasi_nama) + ` <span class="sub">(${fmtJarak(a.jarak)})</span>` : '-'}</td>
-    <td><span class="pill ok">SUDAH ABSEN</span></td></tr>`).join('')
-    : '<tr><td colspan="9" class="empty" style="padding-left:16px">Tidak ada absensi pada filter ini.</td></tr>';
+    <td><span class="pill ok">SUDAH ABSEN</span></td><td><button class="btn sm" type="button">Kelola</button></td></tr>`).join('')
+    : '<tr><td colspan="10" class="empty" style="padding-left:16px">Tidak ada absensi pada filter ini.</td></tr>';
   if (!window.L) return;
   if (!S.maps.a){ S.maps.a = L.map('aMap').setView([-6.9, 107.6], 9); L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(S.maps.a); S.maps.aLay = L.layerGroup().addTo(S.maps.a); }
   setTimeout(() => S.maps.a.invalidateSize(), 60);
@@ -542,8 +551,35 @@ $('#aBody').addEventListener('click', e => {
     <div class="photos" style="grid-template-columns:minmax(0,320px)"><a href="${esc(fotoUrl(a.foto_path))}" target="_blank" rel="noopener"><img src="${esc(fotoUrl(a.foto_path))}" alt="Selfie"></a></div>
     <dl class="dl"><dt>Username</dt><dd class="mono">${esc(a.username)}</dd><dt>Tanggal</dt><dd>${esc(fHari.format(new Date(a.waktu)))}</dd><dt>Jam</dt><dd class="mono">${esc(a.jam)} WIB</dd>
     <dt>Lokasi GPS</dt><dd>${esc(a.alamat || '-')}</dd><dt>Koordinat</dt><dd class="mono"><a href="${gmaps(a.lat, a.lng)}" target="_blank" rel="noopener">${a.lat.toFixed(6)}, ${a.lng.toFixed(6)}</a> ±${Math.round(a.akurasi || 0)} m</dd>
-    <dt>Area terdekat</dt><dd>${a.lokasi_nama ? esc(a.lokasi_nama) + ' (' + fmtJarak(a.jarak) + ')' : '-'}</dd><dt>Status</dt><dd><span class="pill ok">SUDAH ABSEN</span></dd></dl>`);
+    <dt>Area terdekat</dt><dd>${a.lokasi_nama ? esc(a.lokasi_nama) + ' (' + fmtJarak(a.jarak) + ')' : '-'}</dd><dt>Status</dt><dd><span class="pill ok">SUDAH ABSEN</span></dd></dl>
+    ${a.diedit_at ? `<p class="sub">Diedit oleh ${esc(a.diedit_oleh || 'Super Admin')} · ${esc(fWaktuD(a.diedit_at))}</p>` : ''}
+    <div class="row"><button class="btn sm" type="button" data-edit>Edit absensi</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus absensi</button></div>
+    <p class="sub">Menghapus absensi membuat teknisi bisa absen lagi pada tanggal tersebut. Data juga hilang dari riwayat di APK.</p>`);
+  $('#panel [data-edit]').addEventListener('click', () => editAbsensi(a));
+  $('#panel [data-hapus]').addEventListener('click', async e => {
+    const b = e.currentTarget;
+    if (b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Klik lagi untuk menghapus'; return; }
+    try { await rpc('admin_hapus_absensi', {p_id:a.id}); tutup(); toast('Absensi dihapus.'); muatAbsensi(true); } catch(z){ err(z); }
+  });
 });
+function editAbsensi(a){
+  panel(`<div class="row"><h2 style="font-size:18px">Edit absensi · ${esc(a.teknisi)}</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
+    <form id="fEditAbs" class="stack" novalidate>
+      <div class="row"><label class="f" style="flex:1">Tanggal <input id="eaTgl" type="date" class="in" value="${esc(a.tanggal)}"></label>
+      <label class="f" style="flex:1">Jam <input id="eaJam" type="time" step="1" class="in" value="${esc(String(a.jam).slice(0, 8))}"></label></div>
+      <label class="f">Lokasi GPS (alamat) <textarea id="eaAlamat" class="in" rows="3" maxlength="300">${esc(a.alamat || '')}</textarea></label>
+      <p class="sub">Foto selfie dan koordinat GPS asli tidak diubah.</p>
+      <div class="row"><button class="btn pri" type="submit">Simpan perubahan</button><button class="btn" type="button" data-batal>Batal</button></div>
+    </form>`);
+  $('#panel [data-batal]').addEventListener('click', () => { tutup(); });
+  $('#fEditAbs').addEventListener('submit', async e => {
+    e.preventDefault(); const b = e.submitter; b.disabled = true;
+    try {
+      await rpc('admin_ubah_absensi', {p_id:a.id, p_tanggal:$('#eaTgl').value, p_jam:$('#eaJam').value, p_alamat:$('#eaAlamat').value});
+      tutup(); toast('Absensi diperbarui.'); muatAbsensi(true);
+    } catch(z){ err(z); } finally { b.disabled = false; }
+  });
+}
 $('#aXls').addEventListener('click', () => excel(`absensi-teknisi_${$('#aDari').value}_${$('#aSampai').value}.xlsx`, 'Absensi',
   ['Nama Teknisi','Username','Tanggal','Jam','Lokasi GPS','Latitude','Longitude','Akurasi (m)','Area Terdekat','Jarak (m)','Status','Foto Selfie'],
   absFilter().map(a => [a.teknisi, a.username, a.tanggal, String(a.jam).slice(0, 8), a.alamat || '', a.lat, a.lng, Math.round(a.akurasi || 0), a.lokasi_nama || '', a.jarak ?? '', 'SUDAH ABSEN', fotoUrl(a.foto_path)])));
@@ -661,24 +697,36 @@ async function muatAkun(diam){
   try { S.akun = await rpc('admin_daftar_akun', {}); renderAkun(); } catch(e){ if (!diam) err(e); }
 }
 function renderAkun(){
-  $('#akN').textContent = `${S.akun.length} akun`;
-  $('#akBody').innerHTML = S.akun.map(a => `<tr><td><b>${esc(a.nama)}</b></td><td class="num">${esc(a.username)}</td><td class="num">${a.password ? `<span class="pwtxt">${esc(a.password)}</span>` : '<span class="sub" title="Terlihat setelah akun ini login sekali atau password diatur ulang">belum tersedia</span>'}</td>
+  $('#akN').textContent = `· ${S.akun.length} akun`;
+  $('#akBody').innerHTML = S.akun.map(a => `<tr${a.aktif ? '' : ' style="opacity:.6"'}><td><div class="row" style="flex-wrap:nowrap;gap:10px">${a.foto_profil ? `<img class="avsm" src="${esc(fotoUrl(a.foto_profil))}" alt="">` : `<span class="avsm">${esc(a.nama.split(/[\s-]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase())}</span>`}<b>${esc(a.nama)}</b></div></td><td class="num">${esc(a.username)}</td><td class="num">${a.password ? `<span class="pwtxt">${esc(a.password)}</span>` : '<span class="sub" title="Terlihat setelah akun ini login sekali atau password diatur ulang">belum tersedia</span>'}</td>
     <td>${a.role === 'superadmin' ? '<span class="pill e">SUPER ADMIN</span>' : '<span class="pill idle">TEKNISI</span>'}</td>
     <td>${a.aktif ? '<span class="pill ok">AKTIF</span>' : '<span class="pill bad">NONAKTIF</span>'}</td>
-    <td class="num">${esc(fTglId.format(new Date(a.created_at)))}</td><td><button class="btn sm" type="button" data-ak="${a.id}">Edit</button></td></tr>`).join('');
+    <td class="num">${esc(fTglId.format(new Date(a.created_at)))}</td>
+    <td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" type="button" data-ak="${a.id}">Edit</button>${a.id === S.me.id ? '' : a.aktif
+      ? `<button class="btn sm" type="button" data-off="${a.id}" style="color:var(--bad)">Nonaktifkan</button>` : `<button class="btn sm" type="button" data-on="${a.id}" style="color:var(--ok)">Aktifkan</button>`}</div></td></tr>`).join('');
 }
 function resetAkun(){
-  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); $('#akPass').type = 'password'; $('#akEye').textContent = 'Lihat'; $('#akRole').value = 'teknisi'; $('#akAktif').value = '1';
-  $('#akTitle').textContent = 'Buat akun teknisi'; $('#akPassLbl').textContent = 'Password (min. 6 karakter)'; $('#akBatal').hidden = true;
+  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); lihatPw($('#akPass'), false); $('#akRole').value = 'teknisi'; $('#akAktif').value = '1';
+  $('#akTitle').textContent = 'Tambah akun teknisi'; $('#akPassLbl').textContent = 'Password (min. 6 karakter)';
 }
-$('#akBatal').addEventListener('click', resetAkun);
-$('#akEye').addEventListener('click', () => { const i = $('#akPass'); i.type = i.type === 'password' ? 'text' : 'password'; $('#akEye').textContent = i.type === 'password' ? 'Lihat' : 'Sembunyi'; });
-$('#akBody').addEventListener('click', e => {
-  const b = e.target.closest('[data-ak]'); if (!b) return;
-  const a = S.akun.find(x => x.id === b.dataset.ak); S.akEdit = a.id;
-  $('#akNama').value = a.nama; $('#akUser').value = a.username; $('#akPass').value = a.password || ''; $('#akPass').type = 'text'; $('#akEye').textContent = 'Sembunyi'; $('#akRole').value = a.role; $('#akAktif').value = a.aktif ? '1' : '0';
-  $('#akTitle').textContent = 'Edit akun ' + a.username; $('#akPassLbl').textContent = 'Password (ubah untuk mengganti, kosongkan jika tidak diganti)'; $('#akBatal').hidden = false;
-  window.scrollTo({top:0, behavior:'smooth'}); $('#akNama').focus();
+function bukaTambah(){ if (!S.akPrefill) resetAkun(); S.akPrefill = false; setTimeout(() => $('#akNama').focus(), 50); }
+$('#akBody').addEventListener('click', async e => {
+  const ed = e.target.closest('[data-ak]'), off = e.target.closest('[data-off]'), on = e.target.closest('[data-on]');
+  if (ed){
+    const a = S.akun.find(x => x.id === ed.dataset.ak); S.akEdit = a.id; S.akPrefill = true;
+    $('#akNama').value = a.nama; $('#akUser').value = a.username; $('#akPass').value = a.password || ''; lihatPw($('#akPass'), true);
+    $('#akRole').value = a.role; $('#akAktif').value = a.aktif ? '1' : '0';
+    $('#akTitle').textContent = 'Edit akun ' + a.username; $('#akPassLbl').textContent = 'Password (ubah untuk mengganti, kosongkan jika tidak diganti)';
+    location.hash = 'tambah';
+  }
+  const b = off || on;
+  if (b){
+    const a = S.akun.find(x => x.id === (b.dataset.off || b.dataset.on));
+    if (off && b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Yakin nonaktifkan?'; return; }
+    b.disabled = true;
+    try { await rpc('admin_set_aktif', {p_id:a.id, p_aktif:!!on}); toast(on ? `Akun ${a.username} diaktifkan.` : `Akun ${a.username} dinonaktifkan dan dikeluarkan dari APK.`); await muatAkun(); }
+    catch(x){ err(x); b.disabled = false; }
+  }
 });
 $('#fAkun').addEventListener('submit', async e => {
   e.preventDefault(); const b = e.submitter; b.disabled = true;
@@ -687,7 +735,7 @@ $('#fAkun').addEventListener('submit', async e => {
     const pass = S.akEdit && $('#akPass').value === (lama || '') ? '' : $('#akPass').value;
     await rpc('admin_simpan_akun', {p_id:S.akEdit, p_username:$('#akUser').value.trim(), p_nama:$('#akNama').value.trim(), p_password:pass,
       p_role:$('#akRole').value, p_aktif:$('#akAktif').value === '1'});
-    toast(S.akEdit ? 'Akun diperbarui.' : 'Akun dibuat. Sudah bisa login di aplikasi teknisi.'); resetAkun(); await muatAkun();
+    toast(S.akEdit ? 'Akun diperbarui.' : 'Akun dibuat. Sudah bisa login di aplikasi teknisi.'); resetAkun(); location.hash = 'akun';
   } catch(x){ err(x); } finally { b.disabled = false; }
 });
 
@@ -741,6 +789,16 @@ function panel(html){ $('#panel').innerHTML = html; $('#modal').hidden = false; 
 function tutup(){ $('#modal').hidden = true; $('#panel').innerHTML = ''; }
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.closest('[data-tutup]')) tutup(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').hidden) tutup(); });
+
+/* ================= MATA PASSWORD ================= */
+const MATA = '<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const MATA_X = '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.8 9.8 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+function lihatPw(inp, on){ inp.type = on ? 'text' : 'password'; const b = inp.parentNode.querySelector('.eye'); if (b){ b.innerHTML = on ? MATA_X : MATA; b.setAttribute('aria-label', on ? 'Sembunyikan password' : 'Tampilkan password'); } }
+document.querySelectorAll('input[type="password"]').forEach(inp => {
+  const w = document.createElement('span'); w.className = 'pw'; inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'eye'; w.appendChild(b); lihatPw(inp, false);
+  b.addEventListener('click', () => lihatPw(inp, inp.type === 'password'));
+});
 
 /* ================= MULAI ================= */
 (async function(){
@@ -848,6 +906,41 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
 .thumb button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-weight:800;cursor:pointer}
 
 .prof{display:flex;gap:14px;align-items:center}
+.phero{background:var(--navy);color:#fff;border-radius:18px;padding:20px;display:grid;gap:16px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.phero::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;border:28px solid rgba(255,255,255,.05)}
+.phero .prof{position:relative;z-index:1}
+.phero h2{color:#fff;font-size:19px}
+.phero .sub{color:rgba(255,255,255,.72)}
+.av-wrap{position:relative;flex:none}
+.av-big{width:72px;height:72px;border-radius:20px;background:var(--electric);color:#fff;display:grid;place-items:center;font-weight:800;font-size:26px;overflow:hidden;border:3px solid rgba(255,255,255,.25)}
+.av-big img{width:100%;height:100%;object-fit:cover}
+.av-edit{position:absolute;right:-6px;bottom:-6px;width:30px;height:30px;border-radius:50%;border:2px solid var(--navy);background:#fff;color:var(--navy);display:grid;place-items:center;cursor:pointer;padding:0}
+.av-edit svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tags{display:flex;gap:6px;flex-wrap:wrap;position:relative;z-index:1}
+.tags .pill{background:rgba(255,255,255,.12);color:#fff}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px;box-shadow:var(--shadow)}
+.stat span{font-size:12px;color:var(--muted);font-weight:700}
+.stat b{font-family:var(--mono);font-size:26px;line-height:1.1;font-weight:600}
+.stat b small{font-size:13px;color:var(--muted);font-weight:500}
+.stat i{font-style:normal;font-size:12px;color:var(--muted)}
+.bar{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden;border:1px solid var(--line)}
+.bar > div{height:100%;background:var(--ok);border-radius:999px;transition:width .4s}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px;margin-top:6px}
+.week .col{display:grid;grid-template-rows:auto 1fr auto auto;justify-items:center;gap:4px;height:100%}
+.week .val{font-family:var(--mono);font-size:12px;font-weight:600}
+.week .track{width:100%;max-width:30px;display:flex;align-items:flex-end;height:100%}
+.week .fill{width:100%;background:var(--electric);border-radius:7px 7px 3px 3px;min-height:3px}
+.week .col.today .fill{background:var(--navy)}
+.week .day{font-size:11px;color:var(--muted);font-weight:700}
+.week .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.week .dot.on{background:var(--ok)}
+details.set{border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow)}
+details.set summary{padding:16px 18px;font-weight:800;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px}
+details.set summary::-webkit-details-marker{display:none}
+details.set summary::after{content:"›";margin-left:auto;font-size:22px;color:var(--muted);transition:transform .2s}
+details.set[open] summary::after{transform:rotate(90deg)}
+details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
 .avatar{width:56px;height:56px;border-radius:16px;background:var(--electric);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none}
 
 /* navigasi bawah */
@@ -977,23 +1070,56 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
 
   <!-- AKUN -->
   <section id="vAkun" class="view" hidden>
-    <div class="card stack">
-      <div class="prof"><div id="avatar" class="avatar">?</div><div><h2 id="pNama">-</h2><p class="sub mono" id="pUser"></p></div></div>
-      <dl class="kv">
-        <dt>Nama lengkap</dt><dd id="pNama2">-</dd>
-        <dt>Username</dt><dd id="pUser2" class="mono">-</dd>
-        <dt>Password</dt><dd class="mono">••••••••</dd>
-        <dt>Role akun</dt><dd><span class="pill e" id="pRole">-</span></dd>
-        <dt>Status akun</dt><dd><span class="pill ok" id="pStatus">-</span></dd>
-      </dl>
-      <p class="sub">Nama dan username hanya bisa diubah oleh Super Admin.</p>
+    <div class="phero">
+      <div class="prof">
+        <div class="av-wrap">
+          <div id="avatar" class="av-big">?</div>
+          <button id="btnFoto" class="av-edit" type="button" aria-label="Ganti foto profil"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
+          <input id="fileFoto" type="file" accept="image/*" hidden>
+        </div>
+        <div style="min-width:0"><h2 id="pNama">-</h2><p class="sub mono" id="pUser"></p></div>
+      </div>
+      <div class="tags"><span class="pill" id="pRole">TEKNISI</span><span class="pill" id="pStatus">AKTIF</span><span class="pill" id="pAbsen">-</span></div>
     </div>
-    <form id="fPw" class="card stack">
-      <h3>Ubah password</h3>
-      <label class="f">Password lama <input id="pwLama" class="in" type="password" autocomplete="current-password" required></label>
-      <label class="f">Password baru (min. 6 karakter) <input id="pwBaru" class="in" type="password" autocomplete="new-password" minlength="6" required></label>
-      <button class="btn navy" type="submit">Simpan password baru</button>
-    </form>
+
+    <div>
+      <h3 style="margin:4px 2px 10px">Progres hari ini</h3>
+      <div class="stats">
+        <div class="stat"><span>Report hari ini</span><b id="sRepHari">0</b><i>pelanggan selesai dilaporkan</i></div>
+        <div class="stat"><span>Kabel hari ini</span><b id="sKabHari">0<small> m</small></b><i>total panjang kabel</i></div>
+      </div>
+    </div>
+
+    <div class="card stack">
+      <div class="row"><h3>Summary bulan ini</h3><span class="spacer"></span><span class="pill e" id="sBulan"></span></div>
+      <div class="stats">
+        <div class="stat"><span>Report</span><b id="sRepBln">0</b></div>
+        <div class="stat"><span>Panjang kabel</span><b id="sKabBln">0<small> m</small></b></div>
+      </div>
+      <div class="stack" style="gap:6px">
+        <div class="row"><b style="font-size:14px">Kehadiran</b><span class="spacer"></span><span class="sub mono" id="sHadir">0 / 0 hari</span></div>
+        <div class="bar"><div id="sHadirBar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row"><h3>7 hari terakhir</h3><span class="spacer"></span><span class="sub">batang = report · titik hijau = absen</span></div>
+      <div id="week" class="week"></div>
+    </div>
+
+    <div class="card">
+      <h3>Total sepanjang waktu</h3>
+      <p style="margin:8px 0 0;font-size:15px"><b id="sRepTot">0</b> report · <b id="sKabTot">0</b> m kabel · bergabung <span id="sJoin">-</span></p>
+    </div>
+
+    <details class="set">
+      <summary><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Ubah password</summary>
+      <form id="fPw" class="in-body">
+        <label class="f">Password lama <input id="pwLama" class="in" type="password" autocomplete="current-password" required></label>
+        <label class="f">Password baru (min. 6 karakter) <input id="pwBaru" class="in" type="password" autocomplete="new-password" minlength="6" required></label>
+        <button class="btn navy" type="submit">Simpan password baru</button>
+      </form>
+    </details>
     <button id="btnLogout" class="btn big" type="button">Keluar dari akun</button>
   </section>
 </main>
@@ -1086,6 +1212,9 @@ function tampil(){
   Object.entries(TABS).forEach(([k, id]) => $('#' + id).hidden = login || k !== tab);
   document.querySelectorAll('#bnav [data-tab]').forEach(b => b.dataset.tab === tab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   $('#topSub').textContent = login ? 'Technician App' : (S.me ? S.me.nama : '');
+  if (!login && tab === 'akun') muatRingkasan().catch(() => {});
+  if (!login && S.me && tab === 'absen') muatAbsensi().catch(() => {});
+  if (!login && S.me && tab === 'report') muatRiwayat().catch(() => {});
   if (!login && tab === 'absen'){ renderAbsen(); if (S.map) setTimeout(() => { S.map.invalidateSize(); petaUpdate(); }, 60); }
   window.scrollTo(0, 0);
 }
@@ -1103,17 +1232,49 @@ async function mulai(){
     S.lokasi = l.data || [];
     $('#dlStasiun').innerHTML = S.lokasi.map(x => `<option value="${esc(x.nama)}">`).join('');
   } catch(_){}
-  await Promise.all([muatAbsensi().catch(e => toast(pesan(e), 'bad')), muatRiwayat().catch(e => toast(pesan(e), 'bad'))]);
+  await Promise.all([muatAbsensi().catch(e => toast(pesan(e), 'bad')), muatRiwayat().catch(e => toast(pesan(e), 'bad')), muatRingkasan().catch(() => {})]);
   if (S.watch == null) mulaiGPS();
 }
 function isiProfil(){
   const m = S.me;
-  $('#avatar').textContent = m.nama.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  $('#pNama').textContent = m.nama; $('#pNama2').textContent = m.nama;
-  $('#pUser').textContent = '@' + m.username; $('#pUser2').textContent = m.username;
+  const inisial = m.nama.split(/[\s-]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  $('#avatar').innerHTML = m.foto_profil ? `<img src="${esc(fotoUrl(m.foto_profil))}" alt="Foto profil ${esc(m.nama)}">` : esc(inisial);
+  $('#pNama').textContent = m.nama; $('#pUser').textContent = '@' + m.username;
   $('#pRole').textContent = m.role === 'teknisi' ? 'TEKNISI' : 'SUPER ADMIN';
   $('#pStatus').textContent = m.aktif ? 'AKTIF' : 'NONAKTIF';
+  $('#sJoin').textContent = new Intl.DateTimeFormat('id-ID', {timeZone:TZ, month:'long', year:'numeric'}).format(new Date(m.created_at));
 }
+async function muatRingkasan(){
+  const r = await rpc('ringkasan_saya', {});
+  $('#sRepHari').textContent = r.report_hari_ini;
+  $('#sKabHari').innerHTML = `${fmtM(r.kabel_hari_ini)}<small> m</small>`;
+  $('#sRepBln').textContent = r.report_bulan_ini;
+  $('#sKabBln').innerHTML = `${fmtM(r.kabel_bulan_ini)}<small> m</small>`;
+  $('#sBulan').textContent = new Intl.DateTimeFormat('id-ID', {timeZone:TZ, month:'long', year:'numeric'}).format(new Date());
+  $('#sHadir').textContent = `${r.absen_bulan_ini} / ${r.hari_bulan_ini} hari`;
+  $('#sHadirBar').style.width = Math.min(100, Math.round(r.absen_bulan_ini / Math.max(1, r.hari_bulan_ini) * 100)) + '%';
+  $('#sRepTot').textContent = Number(r.report_total).toLocaleString('id-ID'); $('#sKabTot').textContent = fmtM(r.kabel_total);
+  $('#pAbsen').textContent = r.absen_hari_ini ? 'SUDAH ABSEN HARI INI' : 'BELUM ABSEN HARI INI';
+  const max = Math.max(1, ...r.harian.map(h => h.report)), hariLbl = new Intl.DateTimeFormat('id-ID', {timeZone:'UTC', weekday:'short'});
+  $('#week').innerHTML = r.harian.map((h, i) => `<div class="col${i === r.harian.length - 1 ? ' today' : ''}"><span class="val">${h.report}</span>
+    <div class="track"><div class="fill" style="height:${Math.round(h.report / max * 100)}%"></div></div>
+    <span class="day">${i === r.harian.length - 1 ? 'Hari ini' : hariLbl.format(new Date(h.tanggal + 'T00:00:00Z'))}</span><span class="dot${h.absen ? ' on' : ''}" title="${h.absen ? 'Absen' : 'Tidak absen'}"></span></div>`).join('');
+}
+$('#btnFoto').addEventListener('click', () => $('#fileFoto').click());
+$('#avatar').addEventListener('click', () => $('#fileFoto').click());
+$('#fileFoto').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try {
+    const img = await bacaGambar(f), sisi = Math.min(img.naturalWidth, img.naturalHeight), N = 480;
+    const cv = $('#cv'), ctx = cv.getContext('2d'); cv.width = N; cv.height = N;
+    ctx.drawImage(img, (img.naturalWidth - sisi) / 2, (img.naturalHeight - sisi) / 2, sisi, sisi, 0, 0, N, N); URL.revokeObjectURL(img.src);
+    const blob = await toBlob(cv, .8);
+    toast('Mengunggah foto profil…');
+    const path = await upload('profil', blob);
+    await rpc('ubah_foto_profil', {p_path:path});
+    S.me.foto_profil = path; isiProfil(); toast('Foto profil diperbarui.');
+  } catch(err){ toast(pesan(err), 'bad'); }
+});
 
 /* ---------------- report ---------------- */
 function teksReport(x){
@@ -1169,7 +1330,7 @@ $('#fRep').addEventListener('submit', e => {
       await rpc('kirim_laporan', {p_nama_pelanggan:v('#rNamaPel'), p_id_pelanggan:v('#rIdPel'), p_sn_ont:v('#rSn'), p_odc:v('#rOdc'), p_odp:v('#rOdp'),
         p_port:v('#rPort'), p_panjang_kabel:Number(kabel), p_stasiun:v('#rStasiun'),
         p_lat:S.pos ? S.pos.lat : null, p_lng:S.pos ? S.pos.lng : null, p_akurasi:S.pos ? S.pos.acc : null, p_foto_paths:paths});
-      resetForm(); toast('REPORT BERHASIL DISIMPAN.');
+      resetForm(); toast('REPORT BERHASIL DISIMPAN.'); muatRingkasan().catch(() => {});
       await muatRiwayat();
     } catch(err){ toast(pesan(err), 'bad'); }
   });
@@ -1227,7 +1388,9 @@ function renderAbsen(){
   $('#hero').className = 'hero ' + (a ? 'done' : 'wait');
   $('#heroIc').innerHTML = a ? IC_OK : IC_WAIT;
   $('#heroSt').textContent = a ? 'SUDAH ABSEN' : 'BELUM ABSEN';
-  $('#heroMeta').textContent = a ? `${fHari.format(new Date(a.waktu))} · pukul ${String(a.jam).slice(0, 5)} WIB` : `${fHari.format(new Date())} · absensi 1 kali per hari, kapan saja`;
+  const besok = fHari.format(new Date(Date.now() + 864e5));
+  $('#heroMeta').innerHTML = a ? `${esc(fHari.format(new Date(a.waktu)))} · pukul ${esc(String(a.jam).slice(0, 5))} WIB<br><span style="opacity:.75">Absen berikutnya: ${esc(besok)}, mulai 00.00 WIB</span>`
+    : `${esc(fHari.format(new Date()))} · absensi 1 kali per hari, kapan saja`;
   $('#absenForm').hidden = !!a;
   $('#btnAbsen').disabled = !(S.selfie && S.pos);
   $('#absList').innerHTML = S.absensi.length ? S.absensi.map(x => `
@@ -1330,7 +1493,7 @@ $('#btnAbsen').addEventListener('click', e => busy(e.currentTarget, 'Mengirim…
     const path = await upload('absen', S.selfie);
     await rpc('absen', {p_lat:S.pos.lat, p_lng:S.pos.lng, p_akurasi:S.pos.acc, p_alamat:S.alamat || null, p_foto:path});
     S.selfie = null; $('#selfiePh').innerHTML = ''; $('#btnSelfie').textContent = 'Ambil selfie';
-    toast('ABSENSI BERHASIL DISIMPAN.');
+    toast('ABSENSI BERHASIL DISIMPAN.'); muatRingkasan().catch(() => {});
     await muatAbsensi();
   } catch(err){ toast(pesan(err), 'bad'); if (/SUDAH MELAKUKAN ABSENSI/.test(err.message)) muatAbsensi().catch(() => {}); }
 }));
@@ -1358,9 +1521,11 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
 (async function(){
   S.token = ls('st_token');
   if (S.token) await mulai(); else tampil();
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && S.token){ muatAbsensi().catch(() => {}); if (S.absenHariIni && S.absenHariIni.tanggal !== hariIni()) muatAbsensi().catch(() => {}); }
-  });
+  // sinkron otomatis dengan dashboard: data yang diedit/dihapus Super Admin ikut berubah di APK
+  const sinkron = () => { if (!S.token || document.visibilityState !== 'visible' || !$('#camModal').hidden) return;
+    muatAbsensi().catch(() => {}); muatRiwayat().catch(() => {}); muatRingkasan().catch(() => {}); };
+  document.addEventListener('visibilitychange', sinkron);
+  setInterval(sinkron, 30000);
 })();
 </script>
 
