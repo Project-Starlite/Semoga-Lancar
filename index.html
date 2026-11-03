@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -187,12 +188,13 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
 @keyframes sp{to{transform:rotate(360deg)}}
 .loading{display:flex;gap:10px;align-items:center;color:var(--muted);padding:12px 0}
 .pw{position:relative}
+.pwtxt{background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-weight:600;user-select:all}
 .pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);cursor:pointer;font-size:12px;font-weight:700}
 </style>
 <!-- ============ LOGIN SUPER ADMIN ============ -->
 <div id="gate" class="gate" hidden>
   <div class="gate-art">
-    <div class="brand" style="padding:0"><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div><div><b>STARLITE</b><small>Technician App</small></div></div>
+    <div class="brand" style="padding:0"><div class="mark" style="width:48px;height:48px;border-radius:14px"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div><div><b>STARLITE</b><small>Technician App</small></div></div>
     <div>
       <h1>Pusat monitoring teknisi lapangan</h1>
       <p>Absensi selfie &amp; GPS, report pelanggan, dan akun teknisi dalam satu dashboard.</p>
@@ -306,7 +308,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
         <label class="f" style="flex:1">Status akun <select id="akAktif" class="in"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
       </div>
       <div class="row"><button class="btn pri" type="submit">Simpan akun</button><button id="akBatal" class="btn" type="button" hidden>Batal edit</button></div>
-      <p class="sub">Password tersimpan terenkripsi dan tidak bisa dilihat siapa pun. Menonaktifkan akun atau mengganti passwordnya membuat akun tersebut keluar dari aplikasi.</p>
+      <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Super Admin di daftar akun. Akun lama tampil "belum tersedia" sampai pemiliknya login sekali atau password-nya diatur ulang. Menonaktifkan akun atau mengganti password membuat akun tersebut keluar dari aplikasi.</p>
     </form>
     <div class="card" style="padding:0">
       <div class="row" style="padding:16px 20px 12px"><h2>Daftar akun</h2><span class="spacer"></span><span id="akN" class="count"></span></div>
@@ -588,9 +590,42 @@ function detailReport(x){
     <dt>ODC</dt><dd class="mono">${esc(x.odc)}</dd><dt>ODP</dt><dd class="mono">${esc(x.odp)}</dd><dt>Port</dt><dd class="mono">${esc(x.port)}</dd>
     <dt>Panjang kabel</dt><dd class="mono">${fmtM(x.panjang_kabel)} m</dd><dt>Teknisi</dt><dd>${esc(x.teknisi)}</dd><dt>Stasiun</dt><dd>${esc(x.stasiun)}</dd>
     <dt>Lokasi kirim</dt><dd class="mono">${x.lat != null ? `<a href="${gmaps(x.lat, x.lng)}" target="_blank" rel="noopener">${x.lat.toFixed(6)}, ${x.lng.toFixed(6)}</a>` : '-'}</dd></dl>
-    <div class="row"><button class="btn pri sm" type="button" data-copy>Salin teks report</button></div>
+    ${x.diedit_at ? `<p class="sub">Diedit oleh ${esc(x.diedit_oleh || 'Super Admin')} · ${esc(fWaktuD(x.diedit_at))}</p>` : ''}
+    <div class="row"><button class="btn pri sm" type="button" data-copy>Salin teks report</button><button class="btn sm" type="button" data-edit>Edit report</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus report</button></div>
     ${x.foto_paths.length ? `<div><h2 style="margin-bottom:8px">Foto (${x.foto_paths.length})</h2><div class="photos">${x.foto_paths.map((p, i) => `<a href="${esc(fotoUrl(p))}" target="_blank" rel="noopener"><img src="${esc(fotoUrl(p))}" alt="Foto ${i+1}" loading="lazy"></a>`).join('')}</div></div>` : ''}`);
   $('#panel [data-copy]').addEventListener('click', async () => { try { await navigator.clipboard.writeText(teksReport(x)); toast('Teks report disalin.'); } catch(_){ toast('Tidak bisa menyalin otomatis.', 'bad'); } });
+  $('#panel [data-edit]').addEventListener('click', () => editReport(x));
+  $('#panel [data-hapus]').addEventListener('click', async e => {
+    const b = e.currentTarget;
+    if (b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Klik lagi untuk menghapus'; return; }
+    try { await rpc('admin_hapus_laporan', {p_id:x.id}); tutup(); toast('Report dihapus.'); segarSetelahUbah(); } catch(z){ err(z); }
+  });
+}
+const fWaktuD = iso => new Intl.DateTimeFormat('id-ID', {timeZone:TZ, day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).format(new Date(iso));
+function segarSetelahUbah(){ const p = halaman(); if (p === 'report') muatReport(true); if (p === 'ringkasan') muatRingkasan(true); }
+const FIELD_REP = [['nama_pelanggan','Nama pelanggan',''],['id_pelanggan','ID pelanggan','mono'],['sn_ont','SN ONT','mono'],['odc','ODC','mono'],['odp','ODP','mono'],['port','Port','mono'],['panjang_kabel','Panjang kabel (m)','mono'],['stasiun','Stasiun','']];
+function editReport(x){
+  panel(`<div class="row"><h2 style="font-size:18px">Edit report</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
+    <p class="sub">Teknisi: <b>${esc(x.teknisi)}</b> · ${esc(fWaktuD(x.waktu))}</p>
+    <form id="fEditRep" class="stack" novalidate>
+      ${FIELD_REP.map(([k, l, c]) => `<label class="f">${l}<input class="in ${c}" data-k="${k}" value="${esc(k === 'panjang_kabel' ? String(x[k]) : x[k])}" ${k === 'panjang_kabel' ? 'inputmode="decimal"' : ''} maxlength="150"></label>`).join('')}
+      <div class="row"><button class="btn pri" type="submit">Simpan perubahan</button><button class="btn" type="button" data-batal>Batal</button></div>
+    </form>`);
+  $('#panel [data-batal]').addEventListener('click', () => detailReport(x));
+  $('#fEditRep').addEventListener('submit', async e => {
+    e.preventDefault();
+    const v = k => $(`#fEditRep [data-k="${k}"]`).value.trim();
+    const kabel = Number(v('panjang_kabel').replace(',', '.'));
+    if (FIELD_REP.some(([k]) => !v(k))) return toast('Semua kolom wajib diisi. Tulis "-" jika tidak ada.', 'bad');
+    if (!isFinite(kabel) || kabel < 0) return toast('Panjang kabel harus angka meter.', 'bad');
+    const b = e.submitter; b.disabled = true;
+    try {
+      const r = await rpc('admin_ubah_laporan', {p_id:x.id, p_nama_pelanggan:v('nama_pelanggan'), p_id_pelanggan:v('id_pelanggan'), p_sn_ont:v('sn_ont'),
+        p_odc:v('odc'), p_odp:v('odp'), p_port:v('port'), p_panjang_kabel:kabel, p_stasiun:v('stasiun')});
+      [S.lap, S.lapHariIni].forEach(arr => { if (!arr) return; const i = arr.findIndex(z => z.id === x.id); if (i >= 0) arr[i] = r; });
+      toast('Report diperbarui.'); detailReport(r); segarSetelahUbah();
+    } catch(z){ err(z); } finally { b.disabled = false; }
+  });
 }
 const KOLOM_REP = ['Tanggal Report','Jam','Nama Pelanggan','ID Pelanggan','SN ONT','ODC','ODP','PORT','PANJANG KABEL (m)','TEKNISI','STASIUN'];
 const barisRep = x => [x.tanggal, fJamD.format(new Date(x.waktu)), x.nama_pelanggan, x.id_pelanggan, x.sn_ont, x.odc, x.odp, x.port, Number(x.panjang_kabel), x.teknisi, x.stasiun];
@@ -627,13 +662,13 @@ async function muatAkun(diam){
 }
 function renderAkun(){
   $('#akN').textContent = `${S.akun.length} akun`;
-  $('#akBody').innerHTML = S.akun.map(a => `<tr><td><b>${esc(a.nama)}</b></td><td class="num">${esc(a.username)}</td><td class="num">••••••••</td>
+  $('#akBody').innerHTML = S.akun.map(a => `<tr><td><b>${esc(a.nama)}</b></td><td class="num">${esc(a.username)}</td><td class="num">${a.password ? `<span class="pwtxt">${esc(a.password)}</span>` : '<span class="sub" title="Terlihat setelah akun ini login sekali atau password diatur ulang">belum tersedia</span>'}</td>
     <td>${a.role === 'superadmin' ? '<span class="pill e">SUPER ADMIN</span>' : '<span class="pill idle">TEKNISI</span>'}</td>
     <td>${a.aktif ? '<span class="pill ok">AKTIF</span>' : '<span class="pill bad">NONAKTIF</span>'}</td>
     <td class="num">${esc(fTglId.format(new Date(a.created_at)))}</td><td><button class="btn sm" type="button" data-ak="${a.id}">Edit</button></td></tr>`).join('');
 }
 function resetAkun(){
-  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); $('#akRole').value = 'teknisi'; $('#akAktif').value = '1';
+  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); $('#akPass').type = 'password'; $('#akEye').textContent = 'Lihat'; $('#akRole').value = 'teknisi'; $('#akAktif').value = '1';
   $('#akTitle').textContent = 'Buat akun teknisi'; $('#akPassLbl').textContent = 'Password (min. 6 karakter)'; $('#akBatal').hidden = true;
 }
 $('#akBatal').addEventListener('click', resetAkun);
@@ -641,14 +676,16 @@ $('#akEye').addEventListener('click', () => { const i = $('#akPass'); i.type = i
 $('#akBody').addEventListener('click', e => {
   const b = e.target.closest('[data-ak]'); if (!b) return;
   const a = S.akun.find(x => x.id === b.dataset.ak); S.akEdit = a.id;
-  $('#akNama').value = a.nama; $('#akUser').value = a.username; $('#akPass').value = ''; $('#akRole').value = a.role; $('#akAktif').value = a.aktif ? '1' : '0';
-  $('#akTitle').textContent = 'Edit akun ' + a.username; $('#akPassLbl').textContent = 'Password baru (kosongkan jika tidak diganti)'; $('#akBatal').hidden = false;
+  $('#akNama').value = a.nama; $('#akUser').value = a.username; $('#akPass').value = a.password || ''; $('#akPass').type = 'text'; $('#akEye').textContent = 'Sembunyi'; $('#akRole').value = a.role; $('#akAktif').value = a.aktif ? '1' : '0';
+  $('#akTitle').textContent = 'Edit akun ' + a.username; $('#akPassLbl').textContent = 'Password (ubah untuk mengganti, kosongkan jika tidak diganti)'; $('#akBatal').hidden = false;
   window.scrollTo({top:0, behavior:'smooth'}); $('#akNama').focus();
 });
 $('#fAkun').addEventListener('submit', async e => {
   e.preventDefault(); const b = e.submitter; b.disabled = true;
   try {
-    await rpc('admin_simpan_akun', {p_id:S.akEdit, p_username:$('#akUser').value.trim(), p_nama:$('#akNama').value.trim(), p_password:$('#akPass').value,
+    const lama = S.akEdit ? (S.akun.find(a => a.id === S.akEdit) || {}).password : null;
+    const pass = S.akEdit && $('#akPass').value === (lama || '') ? '' : $('#akPass').value;
+    await rpc('admin_simpan_akun', {p_id:S.akEdit, p_username:$('#akUser').value.trim(), p_nama:$('#akNama').value.trim(), p_password:pass,
       p_role:$('#akRole').value, p_aktif:$('#akAktif').value === '1'});
     toast(S.akEdit ? 'Akun diperbarui.' : 'Akun dibuat. Sudah bisa login di aplikasi teknisi.'); resetAkun(); await muatAkun();
   } catch(x){ err(x); } finally { b.disabled = false; }
@@ -718,18 +755,14 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal
 /* Layout: aplikasi HP satu kolom — header navy, konten kartu, navigasi bawah 3 menu (Report, Absensi, Akun). */
 :root{
   --navy:#0B1B3F; --navy-2:#162B5C; --electric:#2F6BFF; --electric-2:#1F55E0; --e-soft:#E8EFFF;
-  --bg:#F2F5FB; --surface:#FFFFFF; --sunk:#F5F7FC; --ink:#0B1530; --muted:#5A6684; --line:#DDE4F1;
+  --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F4F6FB; --ink:#0B1530; --muted:#5A6684; --line:#DDE4F1;
   --ok:#15803D; --ok-bg:#E3F6EA; --warn:#C2610C; --warn-bg:#FFF0DD; --bad:#C62828; --bad-bg:#FDE7E7;
   --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  --shadow:0 1px 2px rgba(11,27,63,.06),0 8px 24px rgba(11,27,63,.07);
+  --shadow:0 1px 2px rgba(11,27,63,.05),0 4px 14px rgba(11,27,63,.05);
+  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
-  --navy:#060E22; --navy-2:#0F1E42; --electric:#5B8CFF; --electric-2:#7AA2FF; --e-soft:#16244A;
-  --bg:#070D1C; --surface:#0F182E; --sunk:#0B1326; --ink:#E6ECFA; --muted:#93A0BF; --line:#1E2A47;
-  --ok:#5BD08A; --ok-bg:#10301F; --warn:#F5AE5B; --warn-bg:#3A2610; --bad:#FF8A80; --bad-bg:#3D1414;
-  --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark;
-}}
+
 [hidden]{display:none!important}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
@@ -764,6 +797,11 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
 .in:focus{outline:2px solid var(--electric);border-color:transparent;background:var(--surface)}
 .in[readonly]{background:var(--e-soft);color:var(--electric-2);font-weight:700}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pw{position:relative;display:block}
+.pw .in{padding-right:52px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;border-radius:10px}
+.eye:focus-visible{outline:2px solid var(--electric)}
+.eye svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
 .btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)}
 .btn:active{transform:scale(.98)}
@@ -794,7 +832,7 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
 .map{height:200px;border-radius:12px;overflow:hidden;border:1px solid var(--line);z-index:0}
 .selfie{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center}
 .selfie .ph{width:96px;aspect-ratio:3/4;border-radius:12px;background:var(--sunk);border:1px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--muted)}
-.selfie .ph img{width:100%;height:100%;object-fit:cover}
+.selfie .ph img{width:100%;height:100%;object-fit:contain;background:#000}
 
 .list{display:grid}
 .item{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:12px 0;border-top:1px solid var(--line);align-items:center}
@@ -831,9 +869,9 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
   padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sheet{background:var(--surface);border-radius:20px;width:100%;max-width:420px;padding:16px;display:grid;gap:12px;max-height:100%;overflow:auto}
 .cam{position:relative;aspect-ratio:3/4;background:#000;border-radius:14px;overflow:hidden;max-width:100%}
-.cam video,.cam img{width:100%;height:100%;object-fit:cover;display:block}
+.cam video,.cam img{width:100%;height:100%;object-fit:contain;display:block}
 .cam video{transform:scaleX(-1)}
-.cam .guide{position:absolute;inset:12% 18% 22%;border:2px dashed rgba(255,255,255,.55);border-radius:50% 50% 46% 46%;pointer-events:none}
+.cam .guide{position:absolute;inset:16% 24% 26%;border:2px dashed rgba(255,255,255,.55);border-radius:50% 50% 46% 46%;pointer-events:none}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:1100;
   width:max-content;max-width:calc(100% - 32px);padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:var(--shadow)}
 .toast.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
@@ -897,10 +935,6 @@ label.f{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted);l
 
     <div class="card stack">
       <div class="row"><h3>Riwayat report saya</h3><span class="spacer"></span><span id="riwN" class="sub"></span></div>
-      <div class="grid2">
-        <label class="f">Dari <input id="hDari" type="date" class="in"></label>
-        <label class="f">Sampai <input id="hSampai" type="date" class="in"></label>
-      </div>
       <input id="hCari" class="in" placeholder="Cari nama / ID pelanggan" autocomplete="off">
       <div id="riwList" class="list"></div>
     </div>
@@ -1063,7 +1097,6 @@ async function mulai(){
   } catch(e){ toast(pesan(e), 'bad'); return; }
   if (S.me.role !== 'teknisi'){ keluarLokal(); return toast('Akun Super Admin dipakai di dashboard.', 'bad'); }
   isiProfil(); $('#rTek').value = S.me.nama; $('#repTgl').textContent = fPendek.format(new Date());
-  if (!$('#hDari').value){ $('#hSampai').value = hariIni(); $('#hDari').value = geserHari(hariIni(), -6); }
   tampil();
   try {
     const l = await sb.from('lokasi').select('*').order('nama');
@@ -1093,7 +1126,7 @@ async function salin(teks){
     try { document.execCommand('copy'); toast('Report disalin. Tempel di WhatsApp.'); } catch(__){ toast('Tidak bisa menyalin otomatis.', 'bad'); } t.remove(); }
 }
 async function muatRiwayat(){
-  S.laporan = await rpc('laporan_saya', {p_dari:$('#hDari').value || null, p_sampai:$('#hSampai').value || null});
+  S.laporan = await rpc('laporan_saya', {p_dari:null, p_sampai:null});
   renderRiwayat();
 }
 function renderRiwayat(){
@@ -1106,9 +1139,8 @@ function renderRiwayat(){
       <small>${esc(fWaktu.format(new Date(x.waktu)))} · ${esc(x.odp)} port ${esc(x.port)} · ${fmtM(x.panjang_kabel)} m</small></div>
       <div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" type="button" data-lihat>Detail</button><button class="btn sm" type="button" data-salin>Salin</button></div>
       <div class="dt">${esc(teksReport(x))}</div>
-    </div>`).join('') : '<p class="empty">Belum ada report pada rentang tanggal ini.</p>';
+    </div>`).join('') : '<p class="empty">' + (q ? 'Tidak ada report yang cocok.' : 'Belum ada report.') + '</p>';
 }
-['#hDari', '#hSampai'].forEach(s => $(s).addEventListener('change', () => muatRiwayat().catch(e => toast(pesan(e), 'bad'))));
 $('#hCari').addEventListener('input', renderRiwayat);
 $('#riwList').addEventListener('click', e => {
   const it = e.target.closest('.item'); if (!it) return;
@@ -1138,7 +1170,6 @@ $('#fRep').addEventListener('submit', e => {
         p_port:v('#rPort'), p_panjang_kabel:Number(kabel), p_stasiun:v('#rStasiun'),
         p_lat:S.pos ? S.pos.lat : null, p_lng:S.pos ? S.pos.lng : null, p_akurasi:S.pos ? S.pos.acc : null, p_foto_paths:paths});
       resetForm(); toast('REPORT BERHASIL DISIMPAN.');
-      $('#hSampai').value = hariIni(); if ($('#hDari').value > hariIni()) $('#hDari').value = hariIni();
       await muatRiwayat();
     } catch(err){ toast(pesan(err), 'bad'); }
   });
@@ -1273,7 +1304,7 @@ function modeCam(m){ const live = m === 'live';
 async function bukaSelfie(){ $('#camModal').hidden = false; modeCam('live'); await mulaiStream(); }
 async function mulaiStream(){
   try {
-    S.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:{ideal:960}, height:{ideal:1280}}, audio:false});
+    S.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:{ideal:1280}, height:{ideal:960}}, audio:false});
     const v = $('#camVideo'); v.srcObject = S.stream; await v.play();
     $('#camMsg').textContent = 'Posisikan wajah di dalam bingkai, lalu ambil foto.'; $('#camShot').textContent = 'Ambil foto';
   } catch(_){ S.stream = null; $('#camMsg').textContent = 'Kamera tidak bisa dibuka langsung. Ketuk tombol untuk memotret dengan kamera depan.'; $('#camShot').textContent = 'Buka kamera'; }
@@ -1283,9 +1314,10 @@ function tutupSelfie(){ stopStream(); $('#camModal').hidden = true; }
 async function jepret(){ const v = $('#camVideo'); if (!v.videoWidth) return; S.selfieDraft = await gambarSelfie(v, v.videoWidth, v.videoHeight, true); stopStream(); preview(); }
 function preview(){ const p = $('#camPrev'); if (p.src) URL.revokeObjectURL(p.src); p.src = URL.createObjectURL(S.selfieDraft); modeCam('prev'); $('#camMsg').textContent = 'Pastikan wajah terlihat jelas.'; }
 async function gambarSelfie(src, sw, sh, mirror){
-  const W = 600, H = 800, cv = $('#cv'), ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
-  const r = Math.max(W/sw, H/sh), dw = sw*r, dh = sh*r;
-  ctx.save(); if (mirror){ ctx.translate(W, 0); ctx.scale(-1, 1); } ctx.drawImage(src, (W-dw)/2, (H-dh)/2, dw, dh); ctx.restore();
+  // foto utuh (tidak dipotong / di-zoom), sisi terpanjang maks. 960 px
+  const r = Math.min(1, 960 / Math.max(sw, sh)), W = Math.round(sw*r), H = Math.round(sh*r);
+  const cv = $('#cv'), ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+  ctx.save(); if (mirror){ ctx.translate(W, 0); ctx.scale(-1, 1); } ctx.drawImage(src, 0, 0, W, H); ctx.restore();
   const d = new Date();
   cap(ctx, W, H, [`${S.me.nama} · @${S.me.username}`, `ABSENSI · ${fHari.format(d)} ${fJam.format(d)} WIB`,
     S.pos ? `${S.pos.lat.toFixed(6)}, ${S.pos.lng.toFixed(6)} ±${Math.round(S.pos.acc)} m` : 'Lokasi tidak terbaca']);
@@ -1311,6 +1343,15 @@ $('#fPw').addEventListener('submit', e => {
     try { await rpc('ganti_password', {p_lama:$('#pwLama').value, p_baru:$('#pwBaru').value}); $('#fPw').reset(); toast('Password berhasil diubah.'); }
     catch(err){ toast(pesan(err), 'bad'); }
   });
+});
+
+/* ---------------- tombol mata password ---------------- */
+const MATA = '<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const MATA_X = '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.8 9.8 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+document.querySelectorAll('input[type="password"]').forEach(inp => {
+  const w = document.createElement('span'); w.className = 'pw'; inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'eye'; b.innerHTML = MATA; b.setAttribute('aria-label', 'Tampilkan password'); w.appendChild(b);
+  b.addEventListener('click', () => { const lihat = inp.type === 'password'; inp.type = lihat ? 'text' : 'password'; b.innerHTML = lihat ? MATA_X : MATA; b.setAttribute('aria-label', lihat ? 'Sembunyikan password' : 'Tampilkan password'); });
 });
 
 /* ---------------- mulai ---------------- */
