@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261104134209">
+<meta name="starlite-build" content="20261104161225">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -496,6 +496,7 @@ const S = {token:null, me:null, stat:null, abs:[], lap:[], akun:[], lokasi:[], c
 async function rpc(name, params){
   const {data, error} = await sb.rpc(name, {p_token:S.token, ...params});
   if (error){ if (/Sesi berakhir|Hanya Super Admin/.test(error.message)) keluar(true); throw error; }
+  if (/^admin_(hapus|ubah|kasbon_proses|set_aktif|simpan_akun)/.test(name)) kabar('admin');
   return data;
 }
 
@@ -527,10 +528,33 @@ async function masuk(){
   muatAkun(true).catch(() => {});
   await muatKasbon(true).catch(() => {});
   route();
-  clearInterval(S.timer); S.timer = setInterval(segarkan, 30000);
+  clearInterval(S.timer); S.timer = setInterval(segarkan, 15000);
+  S.hari = hariIni(); pasangLive();
 }
-function segarkan(){
-  if (document.visibilityState !== 'visible' || !S.token || !$('#modal').hidden) return;
+/* ---------- LIVE: update dari APK langsung muncul tanpa refresh ---------- */
+function pasangLive(){
+  if (S.live || !sb.channel) return;
+  try {
+    S.live = sb.channel('starlite-live', {config:{broadcast:{self:false}}})
+      .on('broadcast', {event:'ubah'}, msg => onLive((msg && msg.payload) || {}))
+      .subscribe(st => { $('#liveTxt').textContent = st === 'SUBSCRIBED' ? 'Live · update langsung' : 'Otomatis diperbarui'; });
+  } catch(_){ S.live = null; }
+}
+function kabar(jenis){ try { if (S.live) S.live.send({type:'broadcast', event:'ubah', payload:{jenis, nama:S.me ? S.me.nama : ''}}); } catch(_){} }
+let liveT;
+function onLive(p){
+  if (p.jenis === 'admin') return;
+  clearTimeout(liveT); liveT = setTimeout(() => segarkan(true), 600);
+  const nama = String(p.nama || 'Teknisi').slice(0, 60);
+  const t = {report:`Report baru masuk dari ${nama}`, absen:`${nama} baru saja absen`}[p.jenis];
+  if (t) toast(t, 'info');
+}
+function segarkan(paksa){
+  if (!S.token || !$('#modal').hidden || (paksa !== true && document.visibilityState !== 'visible')) return;
+  const h = hariIni();
+  if (S.hari && h !== S.hari){ // ganti hari: geser filter "sampai" yang tadinya hari ini
+    [['#rSampai'], ['#aDari'], ['#aSampai']].forEach(([s]) => { if ($(s).value === S.hari) $(s).value = h; }); S.hari = h;
+  }
   const p = halaman();
   if (p === 'ringkasan') muatRingkasan(true);
   if (p === 'report') muatReport(true);
@@ -606,7 +630,7 @@ function renderRingkasan(lap, abs){
   $('#kpis').innerHTML = [
     kpi('Teknisi aktif', total, 't-n', 'tek', `${belum} belum absen hari ini`),
     kpi('Absensi hari ini', `${sudah}<small> / ${total}</small>`, 't-ok', 'ok', trend(ab[n - 1], ab[n - 2]), sparkSvg(ab)),
-    kpi('Report hari ini', s.report_hari_ini, 't-e', 'today', trend(rep[n - 1], rep[n - 2]) + ` · ${fmtM(s.kabel_hari_ini)} m kabel`, sparkSvg(rep)),
+    kpi('Pelanggan aktivasi hari ini', s.report_hari_ini, 't-e', 'today', trend(rep[n - 1], rep[n - 2]) + ` · ${fmtM(s.kabel_hari_ini)} m kabel`, sparkSvg(rep)),
     kpi('Kasbon menunggu', wait.length ? fRp(sum(wait)) : 'Rp0', 't-warn', 'kas', `${wait.length} pengajuan perlu persetujuan${acc.length ? ` · ${acc.length} siap transfer` : ''}`),
     kpi('Ditransfer bulan ini', fRp(sum(trf)), 't-v', 'trf', `${trf.length} transfer kasbon`),
     kpi('Total report', Number(s.report_total).toLocaleString('id-ID'), 't-e', 'rep', 'seluruh waktu')
@@ -727,7 +751,8 @@ async function muatReport(diam){
   if (!d || !s || d > s) return toast('Rentang tanggal tidak valid.', 'bad');
   if (!diam) $('#rBody').innerHTML = '<tr><td colspan="10"><div class="loading"><span class="spin"></span> Memuat…</div></td></tr>';
   try {
-    S.lap = await rpc('admin_laporan', {p_dari:d, p_sampai:s});
+    const t = hariIni();
+    [S.lap, S.lapHari] = await Promise.all([rpc('admin_laporan', {p_dari:d, p_sampai:s}), rpc('admin_laporan', {p_dari:t, p_sampai:t})]);
     const v = $('#rTek').value, names = [...new Set([...S.akun.filter(a => a.role === 'teknisi').map(a => a.nama), ...S.lap.map(x => x.teknisi)])].sort();
     $('#rTek').innerHTML = '<option value="">Semua teknisi</option>' + names.map(n => `<option>${esc(n)}</option>`).join(''); $('#rTek').value = v;
     renderReport(); stempel();
@@ -740,7 +765,10 @@ function repFilter(){
 function renderReport(){
   const rows = repFilter();
   $('#rN').textContent = `${rows.length} report`;
-  $('#rKpi').innerHTML = [kpi('Report pada filter', rows.length, 't-e', 'rep'), kpi('Teknisi terlibat', new Set(rows.map(x => x.teknisi)).size, 't-v', 'tek'),
+  const pel = arr => new Set(arr.map(x => String(x.id_pelanggan).trim().toLowerCase())).size;
+  const H = S.lapHari || [], tekH = new Set(H.map(x => x.teknisi)).size;
+  $('#rKpi').innerHTML = [kpi('Total pelanggan', pel(rows), 't-e', 'tek', `pada filter · ${rows.length} report`),
+    kpi('Pelanggan aktivasi hari ini', pel(H), 't-ok', 'today', `${tekH} teknisi · ${fmtM(H.reduce((t, x) => t + Number(x.panjang_kabel || 0), 0))} m kabel`), kpi('Teknisi terlibat', new Set(rows.map(x => x.teknisi)).size, 't-v', 'tek'),
     kpi('Total panjang kabel', fmtM(rows.reduce((t, x) => t + Number(x.panjang_kabel || 0), 0)) + '<small> m</small>', 't-ok', 'kabel')].join('');
   $('#rBody').innerHTML = rows.length ? rows.map(x => `
     <tr class="click" data-rep="${x.id}"><td class="num">${tglLabel(x.tanggal)} <span class="sub">${jamDari(x.waktu)}</span></td><td><b>${esc(x.nama_pelanggan)}</b></td>
@@ -1497,8 +1525,20 @@ const S = {token:null, me:null, lokasi:[], absenHariIni:null, absensi:[], lapora
 async function rpc(name, params){
   const {data, error} = await sb.rpc(name, {p_token:S.token, ...params});
   if (error){ if (/Sesi berakhir/.test(error.message)) keluarLokal(); throw error; }
+  const j = {kirim_laporan:'report', absen:'absen', kasbon_ajukan:'kasbon', kasbon_batal:'kasbon', ubah_foto_profil:'profil'}[name];
+  if (j) kabar(j);
   return data;
 }
+/* LIVE: kabari dashboard seketika; terima perubahan dari Super Admin seketika */
+function pasangLive(){
+  if (S.live || !sb.channel) return;
+  try {
+    S.live = sb.channel('starlite-live', {config:{broadcast:{self:false}}})
+      .on('broadcast', {event:'ubah'}, msg => { const p = (msg && msg.payload) || {}; if (p.jenis === 'admin' && S.sinkron){ clearTimeout(S.liveT); S.liveT = setTimeout(S.sinkron, 600); } })
+      .subscribe();
+  } catch(_){ S.live = null; }
+}
+function kabar(jenis){ try { if (S.live) S.live.send({type:'broadcast', event:'ubah', payload:{jenis, nama:S.me ? S.me.nama : ''}}); } catch(_){} }
 
 /* ---------------- login ---------------- */
 $('#fLogin').addEventListener('submit', e => {
@@ -1918,10 +1958,11 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
   S.token = ls('st_token');
   if (S.token) await mulai(); else tampil();
   // sinkron otomatis dengan dashboard: data yang diedit/dihapus Super Admin ikut berubah di APK
-  const sinkron = () => { if (!S.token || document.visibilityState !== 'visible' || !$('#camModal').hidden) return;
+  pasangLive();
+  const sinkron = S.sinkron = () => { if (!S.token || document.visibilityState !== 'visible' || !$('#camModal').hidden) return;
     muatAbsensi().catch(() => {}); muatRiwayat().catch(() => {}); muatRingkasan().catch(() => {}); muatKasbon().catch(() => {}); };
   document.addEventListener('visibilitychange', sinkron);
-  setInterval(sinkron, 30000);
+  setInterval(sinkron, 20000);
 })();
 </script>
 
