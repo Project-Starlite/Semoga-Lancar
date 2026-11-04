@@ -3,7 +3,7 @@ name: Build APK Teknisi
 on:
   push:
     branches: [main]
-    paths: ['index.html', '.github/workflows/build-apk.yml']
+    paths: ['.github/workflows/build-apk.yml']
   workflow_dispatch:
 
 permissions:
@@ -30,7 +30,13 @@ jobs:
           cp index.html apk/www/index.html
           cd apk
           echo '{"name":"teknisi-lapangan","version":"1.0.0","private":true,"dependencies":{"@capacitor/android":"6.2.0","@capacitor/core":"6.2.0"},"devDependencies":{"@capacitor/cli":"6.2.0"}}' > package.json
-          echo '{"appId":"id.teknisi.lapangan","appName":"Teknisi IKR","webDir":"www"}' > capacitor.config.json
+          # APK membuka website GitHub Pages -> setiap index.html baru langsung terpakai di APK tanpa instal ulang
+          OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]'); REPO="${GITHUB_REPOSITORY#*/}"
+          URL="https://$OWNER.github.io/$REPO/?app=teknisi"
+          echo "APK memuat: $URL"
+          printf '%s' "<!doctype html><html lang=id><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Teknisi IKR</title></head><body style='margin:0;min-height:100vh;display:grid;place-items:center;background:#0B1B3F;color:#C9D5F5;font:15px/1.5 system-ui,sans-serif;text-align:center;padding:24px'><div><b style='display:block;color:#fff;font-size:18px;letter-spacing:.08em;margin-bottom:6px'>STARLITE</b>Tidak ada koneksi internet.<br>Nyalakan data / Wi-Fi lalu coba lagi.<br><br><a href='$URL' style='display:inline-block;padding:12px 20px;border-radius:12px;background:#2F6BFF;color:#fff;font-weight:700;text-decoration:none'>Coba lagi</a></div></body></html>" > www/offline.html
+          echo "{\"appId\":\"id.teknisi.lapangan\",\"appName\":\"Teknisi IKR\",\"webDir\":\"www\",\"server\":{\"url\":\"$URL\",\"errorPath\":\"offline.html\"}}" > capacitor.config.json
+          cat capacitor.config.json
           npm install
           npx cap add android
           npx cap sync android
@@ -55,5 +61,5 @@ jobs:
         with:
           tag_name: apk-${{ github.run_number }}
           name: APK Teknisi IKR build ${{ github.run_number }}
-          body: Unduh teknisi-ikr.apk lalu instal di HP Android.
+          body: Unduh teknisi-ikr.apk lalu instal di HP Android. APK ini otomatis memakai versi terbaru dari website, tidak perlu instal ulang saat ada update fitur.
           files: teknisi-ikr.apk
