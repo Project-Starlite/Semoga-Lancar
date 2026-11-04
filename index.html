@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261104161225">
+<meta name="starlite-build" content="20261104163325">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -279,7 +279,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
 .eye:hover{color:var(--ink)} .eye:focus-visible{outline:2px solid var(--electric)}
 .eye svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 </style>
-<!-- ============ LOGIN SUPER ADMIN ============ -->
+<!-- ============ LOGIN BOSS RIDHO ============ -->
 <div id="gate" class="gate" hidden>
   <div class="gate-art">
     <div class="brand" style="padding:0"><div class="mark" style="width:48px;height:48px;border-radius:14px"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div><div><b>STARLITE</b><small>Technician App</small></div></div>
@@ -287,11 +287,11 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
       <h1>Pusat monitoring teknisi lapangan</h1>
       <p>Absensi selfie &amp; GPS, report pelanggan, dan akun teknisi dalam satu dashboard.</p>
     </div>
-    <p style="font-size:12px">Khusus Super Admin</p>
+    <p style="font-size:12px">Khusus Boss Ridho</p>
   </div>
   <div class="gate-form">
     <form id="fLogin">
-      <div><h2>Masuk Super Admin</h2><p class="sub">Gunakan akun dengan role Super Admin.</p></div>
+      <div><h2>Masuk Boss Ridho</h2><p class="sub">Khusus akun Boss Ridho (admin).</p></div>
       <label class="f">Username <input id="lgUser" class="in" autocomplete="username" autocapitalize="none" required></label>
       <label class="f">Password <input id="lgPass" class="in" type="password" autocomplete="current-password" required></label>
       <button class="btn pri big" type="submit">Masuk dashboard</button>
@@ -303,7 +303,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
 <!-- ============ DASHBOARD ============ -->
 <div id="shell" class="shell" hidden>
 <aside class="side">
-  <div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div><div><b>STARLITE</b><small>Super Admin</small></div></div>
+  <div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div><div><b>STARLITE</b><small>Boss Ridho</small></div></div>
   <nav id="nav" class="nav">
     <div class="navlbl">Monitoring</div>
     <a href="#ringkasan"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</a>
@@ -316,7 +316,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <a href="#tambah"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></svg>Tambah akun</a>
   </nav>
   <div class="side-foot">
-    <div class="who"><div class="av" id="admAv">S</div><div><b id="admNama">Super Admin</b><small id="admUser"></small></div></div>
+    <div class="who"><div class="av" id="admAv">S</div><div><b id="admNama">Boss Ridho</b><small id="admUser"></small></div></div>
     <span class="live"><i></i><span id="liveTxt">Otomatis diperbarui</span></span>
     <button id="btnPw" class="btn sm" type="button">Ganti password</button>
     <a class="btn sm" href="?app=teknisi" target="_blank" rel="noopener">Aplikasi teknisi</a>
@@ -333,7 +333,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <div class="hero-d">
       <div style="position:relative;z-index:1;min-width:0">
         <div class="hi" id="hHi">Selamat datang</div>
-        <h2 id="hNama">Super Admin</h2>
+        <h2 id="hNama">Boss Ridho</h2>
         <p id="hTgl"></p>
         <div class="clk" id="hClk">--:--<small>WIB</small></div>
         <div class="qa">
@@ -400,7 +400,7 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <div class="card" style="padding:0">
       <div class="row" style="padding:16px 20px 12px"><h2>Data report teknisi</h2><span class="spacer"></span><span id="rN" class="count"></span></div>
       <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
-        <table><thead><tr><th>Tanggal report</th><th>Nama pelanggan</th><th>ID pelanggan</th><th>SN ONT</th><th>ODC</th><th>ODP</th><th>Port</th><th>Panjang kabel</th><th>Teknisi</th><th>Stasiun</th></tr></thead><tbody id="rBody"></tbody></table>
+        <table><thead><tr><th>Tanggal report</th><th>Nama pelanggan</th><th>ID pelanggan</th><th>SN ONT</th><th>ODC</th><th>ODP</th><th>Port</th><th>Panjang kabel</th><th>Teknisi</th><th>Stasiun</th><th>Nama team</th></tr></thead><tbody id="rBody"></tbody></table>
       </div>
     </div>
   </section>
@@ -425,11 +425,11 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
       <label class="f">Username <input id="akUser" class="in mono" maxlength="30" autocomplete="off" autocapitalize="none" placeholder="tanpa spasi"></label>
       <label class="f"><span id="akPassLbl">Password (min. 6 karakter)</span><input id="akPass" class="in mono" type="password" maxlength="60" autocomplete="new-password"></label>
       <div class="row">
-        <label class="f" style="flex:1">Role akun <select id="akRole" class="in"><option value="teknisi">Teknisi</option><option value="superadmin">Super Admin</option></select></label>
+        <label class="f" style="flex:1">Role akun <select id="akRole" class="in"><option value="teknisi">Teknisi</option><option value="superadmin">Boss Ridho (admin)</option></select></label>
         <label class="f" style="flex:1">Status akun <select id="akAktif" class="in"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
       </div>
       <div class="row"><button class="btn pri" type="submit">Simpan akun</button><a class="btn" href="#akun" id="akBatal">Batal</a></div>
-      <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Super Admin di daftar akun.</p>
+      <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Boss Ridho di daftar akun.</p>
     </form>
   </section>
 
@@ -486,7 +486,7 @@ const gmaps = (a, b) => `https://www.google.com/maps?q=${a},${b}`;
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(_){ return null; } }
 let toastT;
-function toast(msg, kind = 'ok'){ const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 4500); }
+function toast(msg, kind = 'ok'){ const t = $('#toast'); t.textContent = String(msg).replace(/Super Admin/g, 'Boss Ridho'); t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 4500); }
 function err(e){ const m = (e && e.message) || String(e); toast(/Failed to fetch|NetworkError/i.test(m) ? 'Tidak ada koneksi internet.' : m, 'bad'); }
 function muatScript(src){ return new Promise((ok, no) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => no(new Error('Gagal memuat ' + src)); document.head.appendChild(s); }); }
 
@@ -495,7 +495,7 @@ const fotoUrl = p => sb.storage.from('foto').getPublicUrl(p).data.publicUrl;
 const S = {token:null, me:null, stat:null, abs:[], lap:[], akun:[], lokasi:[], charts:{}, maps:{}, akEdit:null, loEdit:null, draft:null};
 async function rpc(name, params){
   const {data, error} = await sb.rpc(name, {p_token:S.token, ...params});
-  if (error){ if (/Sesi berakhir|Hanya Super Admin/.test(error.message)) keluar(true); throw error; }
+  if (error){ if (/Sesi berakhir|Hanya (Super Admin|Boss Ridho)/.test(error.message)) keluar(true); throw error; }
   if (/^admin_(hapus|ubah|kasbon_proses|set_aktif|simpan_akun)/.test(name)) kabar('admin');
   return data;
 }
@@ -506,7 +506,7 @@ $('#fLogin').addEventListener('submit', async e => {
   try {
     const {data, error} = await sb.rpc('login', {p_username:$('#lgUser').value.trim(), p_password:$('#lgPass').value});
     if (error) throw error;
-    if (data.role !== 'superadmin'){ sb.rpc('logout', {p_token:data.token}); throw new Error('Akun ini akun teknisi. Dashboard khusus Super Admin.'); }
+    if (data.role !== 'superadmin'){ sb.rpc('logout', {p_token:data.token}); throw new Error('Akun ini akun teknisi. Dashboard khusus Boss Ridho.'); }
     S.token = data.token; ls('adm_token', S.token); $('#lgPass').value = '';
     await masuk();
   } catch(x){ err(x); } finally { b.disabled = false; }
@@ -518,7 +518,7 @@ function keluar(diam){
 $('#btnOut').addEventListener('click', () => keluar(false));
 async function masuk(){
   S.me = await rpc('profil_saya', {});
-  if (S.me.role !== 'superadmin'){ keluar(true); return toast('Dashboard khusus Super Admin.', 'bad'); }
+  if (S.me.role !== 'superadmin'){ keluar(true); return toast('Dashboard khusus Boss Ridho.', 'bad'); }
   $('#gate').hidden = true; $('#shell').hidden = false;
   $('#admNama').textContent = S.me.nama; $('#admUser').textContent = '@' + S.me.username; $('#admAv').textContent = S.me.nama[0].toUpperCase();
   $('#hNama').textContent = S.me.nama;
@@ -707,7 +707,7 @@ $('#aBody').addEventListener('click', e => {
     <dl class="dl"><dt>Username</dt><dd class="mono">${esc(a.username)}</dd><dt>Tanggal</dt><dd>${esc(fHari.format(new Date(a.waktu)))}</dd><dt>Jam</dt><dd class="mono">${esc(a.jam)} WIB</dd>
     <dt>Lokasi GPS</dt><dd>${esc(a.alamat || '-')}</dd><dt>Koordinat</dt><dd class="mono"><a href="${gmaps(a.lat, a.lng)}" target="_blank" rel="noopener">${a.lat.toFixed(6)}, ${a.lng.toFixed(6)}</a> ±${Math.round(a.akurasi || 0)} m</dd>
     <dt>Area terdekat</dt><dd>${a.lokasi_nama ? esc(a.lokasi_nama) + ' (' + fmtJarak(a.jarak) + ')' : '-'}</dd><dt>Status</dt><dd><span class="pill ok">SUDAH ABSEN</span></dd></dl>
-    ${a.diedit_at ? `<p class="sub">Diedit oleh ${esc(a.diedit_oleh || 'Super Admin')} · ${esc(fWaktuD(a.diedit_at))}</p>` : ''}
+    ${a.diedit_at ? `<p class="sub">Diedit oleh ${esc(a.diedit_oleh || 'Boss Ridho')} · ${esc(fWaktuD(a.diedit_at))}</p>` : ''}
     <div class="row"><button class="btn sm" type="button" data-edit>Edit absensi</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus absensi</button></div>
     <p class="sub">Menghapus absensi membuat teknisi bisa absen lagi pada tanggal tersebut. Data juga hilang dari riwayat di APK.</p>`);
   $('#panel [data-edit]').addEventListener('click', () => editAbsensi(a));
@@ -742,7 +742,7 @@ $('#aXls').addEventListener('click', () => excel(`absensi-teknisi_${$('#aDari').
 /* ================= REPORT ================= */
 function teksReport(x){
   return [`NAMA PELANGGAN : ${x.nama_pelanggan}`, `ID PELANGGAN : ${x.id_pelanggan}`, `SN ONT : ${x.sn_ont}`, `ODC : ${x.odc}`, `ODP : ${x.odp}`,
-          `PORT : ${x.port}`, `PANJANG KABEL : ${fmtM(x.panjang_kabel)} m`, `TEKNISI : ${x.teknisi}`, `STASIUN : ${x.stasiun}`].join('\n');
+          `PORT : ${x.port}`, `PANJANG KABEL : ${fmtM(x.panjang_kabel)} m`, `TEKNISI : ${x.teknisi}`, `STASIUN : ${x.stasiun}`, `NAMA TEAM : ${x.nama_team || '-'}`].join('\n');
 }
 $('#rMuat').addEventListener('click', () => muatReport());
 ['#rTek', '#rCariNama', '#rCariId'].forEach(s => $(s).addEventListener('input', renderReport));
@@ -773,8 +773,8 @@ function renderReport(){
   $('#rBody').innerHTML = rows.length ? rows.map(x => `
     <tr class="click" data-rep="${x.id}"><td class="num">${tglLabel(x.tanggal)} <span class="sub">${jamDari(x.waktu)}</span></td><td><b>${esc(x.nama_pelanggan)}</b></td>
     <td class="num">${esc(x.id_pelanggan)}</td><td class="num">${esc(x.sn_ont)}</td><td class="num">${esc(x.odc)}</td><td class="num">${esc(x.odp)}</td>
-    <td class="num">${esc(x.port)}</td><td class="num">${fmtM(x.panjang_kabel)} m</td><td>${esc(x.teknisi)}</td><td>${esc(x.stasiun)}</td></tr>`).join('')
-    : '<tr><td colspan="10" class="empty" style="padding-left:16px">Tidak ada report pada filter ini.</td></tr>';
+    <td class="num">${esc(x.port)}</td><td class="num">${fmtM(x.panjang_kabel)} m</td><td>${esc(x.teknisi)}</td><td>${esc(x.stasiun)}</td><td class="wrapcell" style="min-width:160px">${esc(x.nama_team || '-')}</td></tr>`).join('')
+    : '<tr><td colspan="11" class="empty" style="padding-left:16px">Tidak ada report pada filter ini.</td></tr>';
 }
 $('#rBody').addEventListener('click', e => { const tr = e.target.closest('[data-rep]'); if (tr) detailReport(S.lap.find(x => x.id === tr.dataset.rep)); });
 function detailReport(x){
@@ -783,9 +783,9 @@ function detailReport(x){
     <dl class="dl"><dt>Tanggal report</dt><dd>${esc(fHari.format(new Date(x.waktu)))} · ${esc(fJamD.format(new Date(x.waktu)))} WIB</dd>
     <dt>Nama pelanggan</dt><dd>${esc(x.nama_pelanggan)}</dd><dt>ID pelanggan</dt><dd class="mono">${esc(x.id_pelanggan)}</dd><dt>SN ONT</dt><dd class="mono">${esc(x.sn_ont)}</dd>
     <dt>ODC</dt><dd class="mono">${esc(x.odc)}</dd><dt>ODP</dt><dd class="mono">${esc(x.odp)}</dd><dt>Port</dt><dd class="mono">${esc(x.port)}</dd>
-    <dt>Panjang kabel</dt><dd class="mono">${fmtM(x.panjang_kabel)} m</dd><dt>Teknisi</dt><dd>${esc(x.teknisi)}</dd><dt>Stasiun</dt><dd>${esc(x.stasiun)}</dd>
+    <dt>Panjang kabel</dt><dd class="mono">${fmtM(x.panjang_kabel)} m</dd><dt>Teknisi</dt><dd>${esc(x.teknisi)}</dd><dt>Stasiun</dt><dd>${esc(x.stasiun)}</dd><dt>Nama team</dt><dd>${esc(x.nama_team || '-')}</dd>
     <dt>Lokasi kirim</dt><dd class="mono">${x.lat != null ? `<a href="${gmaps(x.lat, x.lng)}" target="_blank" rel="noopener">${x.lat.toFixed(6)}, ${x.lng.toFixed(6)}</a>` : '-'}</dd></dl>
-    ${x.diedit_at ? `<p class="sub">Diedit oleh ${esc(x.diedit_oleh || 'Super Admin')} · ${esc(fWaktuD(x.diedit_at))}</p>` : ''}
+    ${x.diedit_at ? `<p class="sub">Diedit oleh ${esc(x.diedit_oleh || 'Boss Ridho')} · ${esc(fWaktuD(x.diedit_at))}</p>` : ''}
     <div class="row"><button class="btn pri sm" type="button" data-copy>Salin teks report</button><button class="btn sm" type="button" data-edit>Edit report</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus report</button></div>
     ${x.foto_paths.length ? `<div><h2 style="margin-bottom:8px">Foto (${x.foto_paths.length})</h2><div class="photos">${x.foto_paths.map((p, i) => `<a href="${esc(fotoUrl(p))}" target="_blank" rel="noopener"><img src="${esc(fotoUrl(p))}" alt="Foto ${i+1}" loading="lazy"></a>`).join('')}</div></div>` : ''}`);
   $('#panel [data-copy]').addEventListener('click', async () => { try { await navigator.clipboard.writeText(teksReport(x)); toast('Teks report disalin.'); } catch(_){ toast('Tidak bisa menyalin otomatis.', 'bad'); } });
@@ -798,12 +798,12 @@ function detailReport(x){
 }
 const fWaktuD = iso => new Intl.DateTimeFormat('id-ID', {timeZone:TZ, day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).format(new Date(iso));
 function segarSetelahUbah(){ const p = halaman(); if (p === 'report') muatReport(true); if (p === 'ringkasan') muatRingkasan(true); }
-const FIELD_REP = [['nama_pelanggan','Nama pelanggan',''],['id_pelanggan','ID pelanggan','mono'],['sn_ont','SN ONT','mono'],['odc','ODC','mono'],['odp','ODP','mono'],['port','Port','mono'],['panjang_kabel','Panjang kabel (m)','mono'],['stasiun','Stasiun','']];
+const FIELD_REP = [['nama_pelanggan','Nama pelanggan',''],['id_pelanggan','ID pelanggan','mono'],['sn_ont','SN ONT','mono'],['odc','ODC','mono'],['odp','ODP','mono'],['port','Port','mono'],['panjang_kabel','Panjang kabel (m)','mono'],['stasiun','Stasiun',''],['nama_team','Nama team (pisahkan dengan koma)','']];
 function editReport(x){
   panel(`<div class="row"><h2 style="font-size:18px">Edit report</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
     <p class="sub">Teknisi: <b>${esc(x.teknisi)}</b> · ${esc(fWaktuD(x.waktu))}</p>
     <form id="fEditRep" class="stack" novalidate>
-      ${FIELD_REP.map(([k, l, c]) => `<label class="f">${l}<input class="in ${c}" data-k="${k}" value="${esc(k === 'panjang_kabel' ? String(x[k]) : x[k])}" ${k === 'panjang_kabel' ? 'inputmode="decimal"' : ''} maxlength="150"></label>`).join('')}
+      ${FIELD_REP.map(([k, l, c]) => `<label class="f">${l}<input class="in ${c}" data-k="${k}" value="${esc(k === 'panjang_kabel' ? String(x[k]) : (x[k] ?? ''))}" ${k === 'panjang_kabel' ? 'inputmode="decimal"' : ''} maxlength="${k === 'nama_team' ? 300 : 150}"></label>`).join('')}
       <div class="row"><button class="btn pri" type="submit">Simpan perubahan</button><button class="btn" type="button" data-batal>Batal</button></div>
     </form>`);
   $('#panel [data-batal]').addEventListener('click', () => detailReport(x));
@@ -811,19 +811,19 @@ function editReport(x){
     e.preventDefault();
     const v = k => $(`#fEditRep [data-k="${k}"]`).value.trim();
     const kabel = Number(v('panjang_kabel').replace(',', '.'));
-    if (FIELD_REP.some(([k]) => !v(k))) return toast('Semua kolom wajib diisi. Tulis "-" jika tidak ada.', 'bad');
+    if (FIELD_REP.some(([k]) => k !== 'nama_team' && !v(k))) return toast('Semua kolom wajib diisi. Tulis "-" jika tidak ada.', 'bad');
     if (!isFinite(kabel) || kabel < 0) return toast('Panjang kabel harus angka meter.', 'bad');
     const b = e.submitter; b.disabled = true;
     try {
       const r = await rpc('admin_ubah_laporan', {p_id:x.id, p_nama_pelanggan:v('nama_pelanggan'), p_id_pelanggan:v('id_pelanggan'), p_sn_ont:v('sn_ont'),
-        p_odc:v('odc'), p_odp:v('odp'), p_port:v('port'), p_panjang_kabel:kabel, p_stasiun:v('stasiun')});
+        p_odc:v('odc'), p_odp:v('odp'), p_port:v('port'), p_panjang_kabel:kabel, p_stasiun:v('stasiun'), p_nama_team:v('nama_team')});
       [S.lap, S.lapHariIni].forEach(arr => { if (!arr) return; const i = arr.findIndex(z => z.id === x.id); if (i >= 0) arr[i] = r; });
       toast('Report diperbarui.'); detailReport(r); segarSetelahUbah();
     } catch(z){ err(z); } finally { b.disabled = false; }
   });
 }
-const KOLOM_REP = ['Tanggal Report','Jam','Nama Pelanggan','ID Pelanggan','SN ONT','ODC','ODP','PORT','PANJANG KABEL (m)','TEKNISI','STASIUN'];
-const barisRep = x => [x.tanggal, fJamD.format(new Date(x.waktu)), x.nama_pelanggan, x.id_pelanggan, x.sn_ont, x.odc, x.odp, x.port, Number(x.panjang_kabel), x.teknisi, x.stasiun];
+const KOLOM_REP = ['Tanggal Report','Jam','Nama Pelanggan','ID Pelanggan','SN ONT','ODC','ODP','PORT','PANJANG KABEL (m)','TEKNISI','STASIUN','NAMA TEAM'];
+const barisRep = x => [x.tanggal, fJamD.format(new Date(x.waktu)), x.nama_pelanggan, x.id_pelanggan, x.sn_ont, x.odc, x.odp, x.port, Number(x.panjang_kabel), x.teknisi, x.stasiun, x.nama_team || ''];
 $('#rXls').addEventListener('click', () => excel(`report-teknisi_${$('#rDari').value}_${$('#rSampai').value}.xlsx`, 'Report', KOLOM_REP, repFilter().map(barisRep)));
 $('#rPdf').addEventListener('click', async e => {
   const rows = repFilter(); if (!rows.length) return toast('Tidak ada data untuk diekspor.', 'bad');
@@ -858,7 +858,7 @@ async function muatAkun(diam){
 function renderAkun(){
   $('#akN').textContent = `· ${S.akun.length} akun`;
   $('#akBody').innerHTML = S.akun.map(a => `<tr${a.aktif ? '' : ' style="opacity:.6"'}><td><div class="row" style="flex-wrap:nowrap;gap:10px">${a.foto_profil ? `<img class="avsm" src="${esc(fotoUrl(a.foto_profil))}" alt="">` : `<span class="avsm">${esc(a.nama.split(/[\s-]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase())}</span>`}<b>${esc(a.nama)}</b></div></td><td class="num">${esc(a.username)}</td><td class="num">${a.password ? `<span class="pwtxt">${esc(a.password)}</span>` : '<span class="sub" title="Terlihat setelah akun ini login sekali atau password diatur ulang">belum tersedia</span>'}</td>
-    <td>${a.role === 'superadmin' ? '<span class="pill e">SUPER ADMIN</span>' : '<span class="pill idle">TEKNISI</span>'}</td>
+    <td>${a.role === 'superadmin' ? '<span class="pill e">BOSS RIDHO</span>' : '<span class="pill idle">TEKNISI</span>'}</td>
     <td>${a.aktif ? '<span class="pill ok">AKTIF</span>' : '<span class="pill bad">NONAKTIF</span>'}</td>
     <td class="num">${esc(fTglId.format(new Date(a.created_at)))}</td>
     <td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" type="button" data-ak="${a.id}">Edit</button>${a.id === S.me.id ? '' : a.aktif
@@ -1034,7 +1034,7 @@ $('#fXls').addEventListener('click', () => excel(`kasbon_${$('#fBulan').value ||
 /* ================= GANTI PASSWORD ================= */
 $('#btnPw').addEventListener('click', () => {
   panel(`<div class="row"><h2 style="font-size:18px">Ganti password</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
-    <dl class="dl"><dt>Nama</dt><dd>${esc(S.me.nama)}</dd><dt>Username</dt><dd class="mono">${esc(S.me.username)}</dd><dt>Role</dt><dd><span class="pill e">SUPER ADMIN</span></dd></dl>
+    <dl class="dl"><dt>Nama</dt><dd>${esc(S.me.nama)}</dd><dt>Username</dt><dd class="mono">${esc(S.me.username)}</dd><dt>Role</dt><dd><span class="pill e">BOSS RIDHO</span></dd></dl>
     <form id="fPw" class="stack">
       <label class="f">Password lama <input id="pwLama" class="in" type="password" autocomplete="current-password" required></label>
       <label class="f">Password baru (min. 6 karakter) <input id="pwBaru" class="in" type="password" autocomplete="new-password" required></label>
@@ -1293,7 +1293,7 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
       <div class="brandbig">
         <div class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z"/></svg></div>
         <b>STARLITE TECHNICIAN APP</b>
-        <p class="sub">Masuk dengan username dan password dari Super Admin.</p>
+        <p class="sub">Masuk dengan username dan password dari Boss Ridho.</p>
       </div>
       <form id="fLogin" class="card stack">
         <label class="f">Username <input id="lgUser" class="in" autocomplete="username" autocapitalize="none" required></label>
@@ -1319,6 +1319,9 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
       <label class="f">Teknisi <input id="rTek" class="in" readonly></label>
       <label class="f">Stasiun <input id="rStasiun" class="in" required maxlength="150" list="dlStasiun" autocomplete="off"></label>
       <datalist id="dlStasiun"></datalist>
+      <label class="f">Nama team <input id="rTeam" class="in" required maxlength="300" list="dlTeam" autocomplete="off" placeholder="contoh: Purwanto, Hadi, Alfarizki"></label>
+      <datalist id="dlTeam"></datalist>
+      <p class="sub" style="margin-top:-6px">Tulis semua teknisi yang mengerjakan WO ini, pisahkan dengan koma. Terisi otomatis dari report terakhir.</p>
       <details>
         <summary class="sub" style="cursor:pointer;font-weight:700">Foto pekerjaan (opsional) · <span id="lpFotoN">0 foto</span></summary>
         <div class="stack" style="margin-top:10px">
@@ -1386,7 +1389,7 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
     </div>
 
     <form id="fKas" class="card stack" novalidate>
-      <div class="row"><h2>REQUEST KASBON</h2><span class="spacer"></span><span class="pill e">ke Super Admin</span></div>
+      <div class="row"><h2>REQUEST KASBON</h2><span class="spacer"></span><span class="pill e">ke Boss Ridho</span></div>
       <label class="f">Nominal (Rp) <input id="kNom" class="in mono amt" inputmode="numeric" placeholder="0" autocomplete="off"></label>
       <div class="qamt"><button type="button" data-n="100000">100 rb</button><button type="button" data-n="200000">200 rb</button><button type="button" data-n="500000">500 rb</button><button type="button" data-n="1000000">1 jt</button></div>
       <label class="f">Keperluan <textarea id="kKep" class="in" rows="2" maxlength="300" placeholder="mis. Bensin &amp; tol ke lokasi pelanggan"></textarea></label>
@@ -1398,7 +1401,7 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
         <label class="f">Atas nama <input id="kAn" class="in" maxlength="80" autocomplete="off"></label>
       </div>
       <button id="btnKas" class="btn pri big" type="submit">AJUKAN KASBON</button>
-      <p class="sub">Pengajuan langsung masuk ke Super Admin. Status dan bukti transfer muncul otomatis di riwayat di bawah.</p>
+      <p class="sub">Pengajuan langsung masuk ke Boss Ridho. Status dan bukti transfer muncul otomatis di riwayat di bawah.</p>
     </form>
 
     <div class="card stack">
@@ -1511,7 +1514,7 @@ function jarakM(a, b, c, d){ const R = 6371000, t = x => x*Math.PI/180, dLat = t
   const h = Math.sin(dLat/2)**2 + Math.cos(t(a))*Math.cos(t(c))*Math.sin(dLng/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
 function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(_){ return null; } }
 let toastT;
-function toast(msg, kind = 'ok'){ const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 4500); }
+function toast(msg, kind = 'ok'){ const t = $('#toast'); t.textContent = String(msg).replace(/Super Admin/g, 'Boss Ridho'); t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 4500); }
 function pesan(e){ const m = (e && e.message) || String(e); return /Failed to fetch|NetworkError|network/i.test(m) ? 'Tidak ada koneksi internet. Coba lagi.' : m; }
 async function busy(btn, label, fn){ const old = btn.innerHTML; btn.disabled = true; btn.innerHTML = `<span class="spin"></span> ${label}`; try { return await fn(); } finally { btn.disabled = false; btn.innerHTML = old; } }
 setInterval(tick, 1000); tick();
@@ -1529,7 +1532,7 @@ async function rpc(name, params){
   if (j) kabar(j);
   return data;
 }
-/* LIVE: kabari dashboard seketika; terima perubahan dari Super Admin seketika */
+/* LIVE: kabari dashboard seketika; terima perubahan dari Boss Ridho seketika */
 function pasangLive(){
   if (S.live || !sb.channel) return;
   try {
@@ -1546,7 +1549,7 @@ $('#fLogin').addEventListener('submit', e => {
   busy(e.submitter, 'Masuk…', async () => {
     const {data, error} = await sb.rpc('login', {p_username:$('#lgUser').value.trim(), p_password:$('#lgPass').value});
     if (error) return toast(pesan(error), 'bad');
-    if (data.role !== 'teknisi'){ sb.rpc('logout', {p_token:data.token}); return toast('Akun Super Admin dipakai di dashboard, bukan di aplikasi teknisi.', 'bad'); }
+    if (data.role !== 'teknisi'){ sb.rpc('logout', {p_token:data.token}); return toast('Akun Boss Ridho dipakai di dashboard, bukan di aplikasi teknisi.', 'bad'); }
     S.token = data.token; ls('st_token', S.token); $('#lgPass').value = '';
     await mulai();
   });
@@ -1578,8 +1581,8 @@ async function mulai(){
   try {
     S.me = await rpc('profil_saya', {});
   } catch(e){ toast(pesan(e), 'bad'); return; }
-  if (S.me.role !== 'teknisi'){ keluarLokal(); return toast('Akun Super Admin dipakai di dashboard.', 'bad'); }
-  isiProfil(); $('#rTek').value = S.me.nama; $('#repTgl').textContent = fPendek.format(new Date());
+  if (S.me.role !== 'teknisi'){ keluarLokal(); return toast('Akun Boss Ridho dipakai di dashboard.', 'bad'); }
+  isiProfil(); $('#rTek').value = S.me.nama; isiTeam(); $('#repTgl').textContent = fPendek.format(new Date());
   tampil();
   try {
     const l = await sb.from('lokasi').select('*').order('nama');
@@ -1595,7 +1598,7 @@ function isiProfil(){
   const inisial = m.nama.split(/[\s-]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
   $('#avatar').innerHTML = m.foto_profil ? `<img src="${esc(fotoUrl(m.foto_profil))}" alt="Foto profil ${esc(m.nama)}">` : esc(inisial);
   $('#pNama').textContent = m.nama; $('#pUser').textContent = '@' + m.username;
-  $('#pRole').textContent = m.role === 'teknisi' ? 'TEKNISI' : 'SUPER ADMIN';
+  $('#pRole').textContent = m.role === 'teknisi' ? 'TEKNISI' : 'BOSS RIDHO';
   $('#pStatus').textContent = m.aktif ? 'AKTIF' : 'NONAKTIF';
   $('#sJoin').textContent = new Intl.DateTimeFormat('id-ID', {timeZone:TZ, month:'long', year:'numeric'}).format(new Date(m.created_at));
 }
@@ -1634,7 +1637,7 @@ $('#fileFoto').addEventListener('change', async e => {
 /* ---------------- report ---------------- */
 function teksReport(x){
   return [`NAMA PELANGGAN : ${x.nama_pelanggan}`, `ID PELANGGAN : ${x.id_pelanggan}`, `SN ONT : ${x.sn_ont}`, `ODC : ${x.odc}`, `ODP : ${x.odp}`,
-          `PORT : ${x.port}`, `PANJANG KABEL : ${fmtM(x.panjang_kabel)} m`, `TEKNISI : ${x.teknisi}`, `STASIUN : ${x.stasiun}`].join('\n');
+          `PORT : ${x.port}`, `PANJANG KABEL : ${fmtM(x.panjang_kabel)} m`, `TEKNISI : ${x.teknisi}`, `STASIUN : ${x.stasiun}`, `NAMA TEAM : ${x.nama_team || '-'}`].join('\n');
 }
 async function salin(teks){
   try { await navigator.clipboard.writeText(teks); toast('Report disalin. Tempel di WhatsApp.'); }
@@ -1652,7 +1655,7 @@ function renderRiwayat(){
   $('#riwList').innerHTML = rows.length ? rows.map(x => `
     <div class="item" data-id="${x.id}">
       <div style="min-width:0"><b>${esc(x.nama_pelanggan)}</b> <span class="sub mono">${esc(x.id_pelanggan)}</span><br>
-      <small>${esc(fWaktu.format(new Date(x.waktu)))} · ${esc(x.odp)} port ${esc(x.port)} · ${fmtM(x.panjang_kabel)} m</small></div>
+      <small>${esc(fWaktu.format(new Date(x.waktu)))} · ${esc(x.odp)} port ${esc(x.port)} · ${fmtM(x.panjang_kabel)} m${x.nama_team ? `<br>Team: ${esc(x.nama_team)}` : ''}</small></div>
       <div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" type="button" data-lihat>Detail</button><button class="btn sm" type="button" data-salin>Salin</button></div>
       <div class="dt">${esc(teksReport(x))}</div>
     </div>`).join('') : '<p class="empty">' + (q ? 'Tidak ada report yang cocok.' : 'Belum ada report.') + '</p>';
@@ -1664,6 +1667,18 @@ $('#riwList').addEventListener('click', e => {
   if (e.target.closest('[data-salin]')) salin(teksReport(x));
   if (e.target.closest('[data-lihat]')) it.classList.toggle('open');
 });
+function rapikanTeam(t){ return t.split(/[,;\n]+/).map(x => x.trim()).filter(Boolean).join(', '); }
+function simpanTeam(t){
+  t = rapikanTeam(t); if (!t) return;
+  let h = []; try { h = JSON.parse(ls('st_team_list') || '[]'); } catch(_){}
+  h = [t, ...h.filter(x => x !== t)].slice(0, 8); ls('st_team_list', JSON.stringify(h)); ls('st_team', t); isiTeam();
+}
+function isiTeam(){
+  let h = []; try { h = JSON.parse(ls('st_team_list') || '[]'); } catch(_){}
+  $('#dlTeam').innerHTML = h.map(x => `<option value="${esc(x)}">`).join('');
+  if (!$('#rTeam').value) $('#rTeam').value = ls('st_team') || (S.me ? S.me.nama : '');
+}
+$('#rTeam').addEventListener('blur', e => { e.target.value = rapikanTeam(e.target.value); });
 function resetForm(){
   ['#rNamaPel','#rIdPel','#rSn','#rOdc','#rOdp','#rPort','#rKabel'].forEach(s => $(s).value = '');
   S.fotos.forEach(f => URL.revokeObjectURL(f.url)); S.fotos = []; renderThumbs();
@@ -1671,7 +1686,7 @@ function resetForm(){
 $('#btnReset').addEventListener('click', () => { resetForm(); toast('Form dikosongkan.'); });
 $('#fRep').addEventListener('submit', e => {
   e.preventDefault();
-  const ids = ['#rNamaPel','#rIdPel','#rSn','#rOdc','#rOdp','#rPort','#rKabel','#rStasiun'];
+  const ids = ['#rNamaPel','#rIdPel','#rSn','#rOdc','#rOdp','#rPort','#rKabel','#rStasiun','#rTeam'];
   const kosong = ids.find(s => !$(s).value.trim());
   if (kosong){ $(kosong).focus(); return toast('Semua kolom wajib diisi. Tulis "-" jika tidak ada.', 'bad'); }
   const kabel = $('#rKabel').value.trim().replace(',', '.');
@@ -1683,9 +1698,9 @@ $('#fRep').addEventListener('submit', e => {
       for (let i = 0; i < S.fotos.length; i++){ btn.innerHTML = `<span class="spin"></span> Foto ${i+1}/${S.fotos.length}…`; paths.push(await upload('laporan', S.fotos[i].blob)); }
       const v = s => $(s).value.trim();
       await rpc('kirim_laporan', {p_nama_pelanggan:v('#rNamaPel'), p_id_pelanggan:v('#rIdPel'), p_sn_ont:v('#rSn'), p_odc:v('#rOdc'), p_odp:v('#rOdp'),
-        p_port:v('#rPort'), p_panjang_kabel:Number(kabel), p_stasiun:v('#rStasiun'),
+        p_port:v('#rPort'), p_panjang_kabel:Number(kabel), p_stasiun:v('#rStasiun'), p_nama_team:v('#rTeam'),
         p_lat:S.pos ? S.pos.lat : null, p_lng:S.pos ? S.pos.lng : null, p_akurasi:S.pos ? S.pos.acc : null, p_foto_paths:paths});
-      resetForm(); toast('REPORT BERHASIL DISIMPAN.'); muatRingkasan().catch(() => {});
+      simpanTeam(v('#rTeam')); resetForm(); toast('REPORT BERHASIL DISIMPAN.'); muatRingkasan().catch(() => {});
       await muatRiwayat();
     } catch(err){ toast(pesan(err), 'bad'); }
   });
@@ -1894,11 +1909,11 @@ function renderKasbon(){
         <div class="steps">
           ${step(true, false, 'Diajukan', esc(fWaktu.format(new Date(k.created_at))))}
           ${batal ? step(false, true, 'Dibatalkan', esc(fWaktu.format(new Date(k.diproses_at)))) :
-            tolak ? step(false, true, 'Ditolak', esc(fWaktu.format(new Date(k.diproses_at))) + ' · ' + esc(k.diproses_oleh || 'Super Admin')) :
-            step(['DISETUJUI','DITRANSFER'].includes(k.status), false, 'Disetujui', k.diproses_at ? esc(fWaktu.format(new Date(k.diproses_at))) : 'menunggu Super Admin') +
+            tolak ? step(false, true, 'Ditolak', esc(fWaktu.format(new Date(k.diproses_at))) + ' · ' + esc(k.diproses_oleh || 'Boss Ridho')) :
+            step(['DISETUJUI','DITRANSFER'].includes(k.status), false, 'Disetujui', k.diproses_at ? esc(fWaktu.format(new Date(k.diproses_at))) : 'menunggu Boss Ridho') +
             step(k.status === 'DITRANSFER', false, 'Ditransfer', k.ditransfer_at ? esc(fWaktu.format(new Date(k.ditransfer_at))) + ` · ke ${esc(k.bank)} ${esc(k.no_rek)} a.n. ${esc(k.atas_nama)}` : 'belum ditransfer')}
         </div>
-        ${k.catatan ? `<div class="note"><b>Catatan Super Admin:</b> ${esc(k.catatan)}</div>` : ''}
+        ${k.catatan ? `<div class="note"><b>Catatan Boss Ridho:</b> ${esc(k.catatan)}</div>` : ''}
         ${k.bukti_path ? `<a class="bukti" href="${esc(fotoUrl(k.bukti_path))}" target="_blank" rel="noopener"><img src="${esc(fotoUrl(k.bukti_path))}" alt="Bukti transfer" loading="lazy"><div><b>Bukti transfer</b><br><small class="sub">Ketuk untuk melihat</small></div></a>` : ''}
         ${k.status === 'MENUNGGU' ? `<button class="btn sm" type="button" data-batal style="color:var(--bad);justify-self:start">Batalkan pengajuan</button>` : ''}
       </div></div>`; }).join('') : `<p class="empty">${K.length ? 'Tidak ada pengajuan pada filter ini.' : 'Belum ada pengajuan kasbon.'}</p>`;
@@ -1957,7 +1972,7 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
 (async function(){
   S.token = ls('st_token');
   if (S.token) await mulai(); else tampil();
-  // sinkron otomatis dengan dashboard: data yang diedit/dihapus Super Admin ikut berubah di APK
+  // sinkron otomatis dengan dashboard: data yang diedit/dihapus Boss Ridho ikut berubah di APK
   pasangLive();
   const sinkron = S.sinkron = () => { if (!S.token || document.visibilityState !== 'visible' || !$('#camModal').hidden) return;
     muatAbsensi().catch(() => {}); muatRiwayat().catch(() => {}); muatRingkasan().catch(() => {}); muatKasbon().catch(() => {}); };
