@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261104163325">
+<meta name="starlite-build" content="20261110113856">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -196,6 +196,17 @@ main{min-width:0;padding:calc(26px + env(safe-area-inset-top,0px)) max(28px,env(
 .sumrow .tr{height:6px;border-radius:999px;background:var(--sunk);margin-top:5px;overflow:hidden}
 .sumrow .tr i{display:block;height:100%;background:var(--ok);border-radius:999px}
 
+/* centang & report progress */
+.ck{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--surface);font-weight:700;cursor:pointer}
+.ck input{width:18px;height:18px;accent-color:var(--electric)}
+.prg-pre{white-space:pre-wrap;font-family:var(--mono);font-size:13px;line-height:1.55;background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0;max-height:420px;overflow:auto}
+.ed-items{display:grid;gap:8px}
+.ed-it{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) repeat(3,minmax(0,.9fr)) 36px;gap:6px;align-items:center}
+.ed-it .in{padding:8px 9px;font-size:13px}
+.ed-h{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.ed-x{border:0;border-radius:9px;background:var(--bad-bg);color:var(--bad);height:34px;font-size:18px;font-weight:700;cursor:pointer}
+@media (max-width:560px){.ed-it{grid-template-columns:1fr 1fr 1fr 36px}.ed-it .g,.ed-it .n{grid-column:1/-1}}
+
 /* komponen */
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0;box-shadow:var(--shadow)}
 .card h2{margin:0;font-size:15px;font-weight:700}
@@ -219,7 +230,7 @@ label.f{display:grid;gap:5px;font-size:12px;font-weight:700;color:var(--muted)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
 .pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.bad{background:var(--bad-bg);color:var(--bad)}
-.pill.e{background:var(--e-soft);color:var(--electric-2)} .pill.idle{background:var(--sunk);color:var(--muted)}
+.pill.e{background:var(--e-soft);color:var(--electric-2)} .pill.v{background:color-mix(in srgb,var(--violet) 14%,transparent);color:var(--violet)} .pill.idle{background:var(--sunk);color:var(--muted)}
 
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);display:grid;gap:12px;position:relative;overflow:hidden}
@@ -308,7 +319,8 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     <div class="navlbl">Monitoring</div>
     <a href="#ringkasan"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</a>
     <a href="#absensi"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Monitoring absensi</a>
-    <a href="#report"><svg class="ic" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>Monitoring report</a>
+    <a href="#report"><svg class="ic" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>Monitoring report IKR</a>
+    <a href="#progres"><svg class="ic" viewBox="0 0 24 24"><path d="M3 20h18M6 20V10M11 20V5M16 20v-7M21 20V8"/></svg>Monitoring progress</a>
     <div class="navlbl">Finance</div>
     <a href="#finance"><svg class="ic" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></svg>Finance<span id="navKas" class="nbadge" hidden></span></a>
     <div class="navlbl">Kelola</div>
@@ -405,12 +417,31 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
     </div>
   </section>
 
+  <!-- PROGRESS PEMBANGUNAN / CIVIL -->
+  <section id="pProgres" class="page" hidden>
+    <div class="card filters">
+      <label class="f">Dari <input id="gDari" type="date" class="in"></label>
+      <label class="f">Sampai <input id="gSampai" type="date" class="in"></label>
+      <label class="f">Teknisi <select id="gTek" class="in"><option value="">Semua teknisi</option></select></label>
+      <label class="f" style="flex:1;min-width:200px">Stasiun / No. PO <input id="gCari" class="in" placeholder="Cari stasiun atau PO"></label>
+      <button id="gMuat" class="btn pri" type="button">Tampilkan</button>
+      <button id="gXls" class="btn xl" type="button">Excel</button>
+    </div>
+    <div id="gKpi" class="kpis"></div>
+    <div class="card" style="padding:0">
+      <div class="row" style="padding:16px 20px 12px"><h2>Daily Report Progress · pembangunan FTTH / civil</h2><span class="spacer"></span><span id="gN" class="count"></span></div>
+      <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
+        <table><thead><tr><th>Tanggal</th><th>Teknisi</th><th>Stasiun</th><th>No. PO</th><th>HP PO</th><th>HP Pemb.</th><th>HP RFS</th><th>ODC</th><th>ODP</th><th>Remark aktivitas</th><th>Aksi</th></tr></thead><tbody id="gBody"></tbody></table>
+      </div>
+    </div>
+  </section>
+
   <!-- AKUN -->
   <section id="pAkun" class="page" hidden>
     <div class="card" style="padding:0">
       <div class="row" style="padding:16px 20px 12px"><h2>Daftar akun</h2><span id="akN" class="count"></span><span class="spacer"></span><a class="btn pri" href="#tambah">+ Tambah akun</a></div>
       <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
-        <table><thead><tr><th>Nama lengkap</th><th>Username</th><th>Password</th><th>Role</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="akBody"></tbody></table>
+        <table><thead><tr><th>Nama lengkap</th><th>Username</th><th>Password</th><th>Role</th><th>Pekerjaan</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="akBody"></tbody></table>
       </div>
     </div>
     <p class="sub">Menonaktifkan akun langsung mengeluarkan teknisi dari APK dan ia tidak bisa login sampai diaktifkan lagi. Riwayat absensi &amp; report tetap tersimpan.</p>
@@ -428,6 +459,12 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
         <label class="f" style="flex:1">Role akun <select id="akRole" class="in"><option value="teknisi">Teknisi</option><option value="superadmin">Boss Ridho (admin)</option></select></label>
         <label class="f" style="flex:1">Status akun <select id="akAktif" class="in"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
       </div>
+      <fieldset class="f" style="border:0;padding:0;margin:0"><legend style="padding:0;margin-bottom:8px">Jenis pekerjaan (menentukan menu report di APK)</legend>
+        <div class="row">
+          <label class="ck"><input type="checkbox" id="akIkr" checked> Report IKR <span class="sub">(pelanggan)</span></label>
+          <label class="ck"><input type="checkbox" id="akPrg"> Pembangunan FTTH / Civil <span class="sub">(Daily Report Progress)</span></label>
+        </div>
+      </fieldset>
       <div class="row"><button class="btn pri" type="submit">Simpan akun</button><a class="btn" href="#akun" id="akBatal">Batal</a></div>
       <p class="sub">Password tersimpan terenkripsi dan hanya terlihat oleh Boss Ridho di daftar akun.</p>
     </form>
@@ -522,7 +559,7 @@ async function masuk(){
   $('#gate').hidden = true; $('#shell').hidden = false;
   $('#admNama').textContent = S.me.nama; $('#admUser').textContent = '@' + S.me.username; $('#admAv').textContent = S.me.nama[0].toUpperCase();
   $('#hNama').textContent = S.me.nama;
-  const t = hariIni(); $('#aDari').value = t; $('#aSampai').value = t; $('#rDari').value = geser(t, -6); $('#rSampai').value = t;
+  const t = hariIni(); $('#aDari').value = t; $('#aSampai').value = t; $('#rDari').value = geser(t, -6); $('#rSampai').value = t; $('#gDari').value = geser(t, -6); $('#gSampai').value = t;
   try { const l = await sb.from('lokasi').select('*').order('nama'); S.lokasi = l.data || []; } catch(_){}
   $('#fBulan').value = t.slice(0, 7);
   muatAkun(true).catch(() => {});
@@ -546,18 +583,19 @@ function onLive(p){
   if (p.jenis === 'admin') return;
   clearTimeout(liveT); liveT = setTimeout(() => segarkan(true), 600);
   const nama = String(p.nama || 'Teknisi').slice(0, 60);
-  const t = {report:`Report baru masuk dari ${nama}`, absen:`${nama} baru saja absen`}[p.jenis];
+  const t = {report:`Report baru masuk dari ${nama}`, progres:`Report progress baru dari ${nama}`, absen:`${nama} baru saja absen`}[p.jenis];
   if (t) toast(t, 'info');
 }
 function segarkan(paksa){
   if (!S.token || !$('#modal').hidden || (paksa !== true && document.visibilityState !== 'visible')) return;
   const h = hariIni();
   if (S.hari && h !== S.hari){ // ganti hari: geser filter "sampai" yang tadinya hari ini
-    [['#rSampai'], ['#aDari'], ['#aSampai']].forEach(([s]) => { if ($(s).value === S.hari) $(s).value = h; }); S.hari = h;
+    [['#rSampai'], ['#gSampai'], ['#aDari'], ['#aSampai']].forEach(([s]) => { if ($(s).value === S.hari) $(s).value = h; }); S.hari = h;
   }
   const p = halaman();
   if (p === 'ringkasan') muatRingkasan(true);
   if (p === 'report') muatReport(true);
+  if (p === 'progres') muatProgres(true);
   if (p === 'absensi') muatAbsensi(true);
   if (p === 'finance' || p === 'ringkasan') muatKasbon(true).then(() => { if (p === 'finance') renderFinance(); if (p === 'ringkasan' && S.stat) renderRingkasan(S.lapHariIni || [], S.absHariIni || []); }).catch(() => {});
   else muatKasbon(true).catch(() => {});
@@ -565,7 +603,7 @@ function segarkan(paksa){
 function stempel(){ $('#upd').textContent = 'Diperbarui ' + fJamD.format(new Date()); }
 
 /* ================= NAVIGASI ================= */
-const PAGES = {ringkasan:['Dashboard', muatRingkasan], absensi:['Monitoring absensi', muatAbsensi], report:['Monitoring report', muatReport],
+const PAGES = {ringkasan:['Dashboard', muatRingkasan], absensi:['Monitoring absensi', muatAbsensi], report:['Monitoring report IKR', muatReport], progres:['Monitoring progress · pembangunan FTTH / civil', muatProgres],
                finance:['Finance · Request kasbon', bukaFinance], akun:['Akun teknisi', () => muatAkun()], tambah:['Tambah akun', bukaTambah]};
 const halaman = () => PAGES[location.hash.slice(1)] ? location.hash.slice(1) : 'ringkasan';
 window.addEventListener('hashchange', route);
@@ -613,7 +651,9 @@ setInterval(() => { const c = document.getElementById('hClk'); if (c) c.innerHTM
 async function muatRingkasan(diam){
   try {
     const t = hariIni();
-    const [st, lap, abs] = await Promise.all([rpc('admin_statistik', {p_hari:14}), rpc('admin_laporan', {p_dari:t, p_sampai:t}), rpc('admin_absensi', {p_dari:t, p_sampai:t})]);
+    const [st, lap, abs, prg] = await Promise.all([rpc('admin_statistik', {p_hari:14}), rpc('admin_laporan', {p_dari:t, p_sampai:t}), rpc('admin_absensi', {p_dari:t, p_sampai:t}),
+      rpc('admin_progres', {p_dari:t, p_sampai:t}).catch(() => [])]);
+    S.prgHari = prg;
     S.stat = st; renderRingkasan(lap, abs); stempel();
   } catch(e){ if (!diam) err(e); }
 }
@@ -642,6 +682,7 @@ function renderRingkasan(lap, abs){
   const IC = {abs:ICON.abs, rep:ICON.rep, kas:ICON.kas};
   const ev = [...abs.map(a => ({w:a.waktu, t:'abs', h:`${a.teknisi} absen`, d:a.alamat || `${a.lat.toFixed(5)}, ${a.lng.toFixed(5)}`})),
     ...lap.map(x => ({w:x.waktu, t:'rep', h:`${x.teknisi} kirim report`, d:`${x.nama_pelanggan} · ${x.id_pelanggan}`})),
+    ...(S.prgHari || []).map(x => ({w:x.waktu, t:'rep', h:`${x.teknisi} kirim report progress`, d:`${x.stasiun}${x.no_po ? ' · PO ' + x.no_po : ''} · ${x.remark || ''}`})),
     ...K.filter(k => fTgl.format(new Date(k.created_at)) === hariIni()).map(k => ({w:k.created_at, t:'kas', h:`${k.teknisi} ajukan kasbon`, d:`${fRp(k.nominal)} · ${k.keperluan}`}))]
     .sort((a, b) => (a.w < b.w ? 1 : -1)).slice(0, 14);
   $('#feed').innerHTML = ev.length ? ev.map(e => `<div class="fi"><span class="ico ${e.t}"><svg class="ic" viewBox="0 0 24 24">${IC[e.t]}</svg></span><div style="min-width:0"><b>${esc(e.h)}</b><small>${esc(e.d)}</small></div><time>${jamDari(e.w)}</time></div>`).join('') : '<p class="empty">Belum ada aktivitas hari ini.</p>';
@@ -851,6 +892,124 @@ async function excel(nama, sheet, head, rows){
   } catch(x){ err(x); }
 }
 
+/* ---- Daily Report Progress: format teks salin (sama di APK & dashboard) ---- */
+const PRG_PRESET = [['', 'Pulling Cable 96 Core'], ['', 'Pulling Cable 144 Core'], ['Install Pole', 'Pole 6 M'], ['Install Pole', 'Pole 7 M'], ['Install Pole', 'Pole 9 M'],
+  ['', 'ODC'], ['', 'ODP'], ['', 'Install Closure 96 Core'], ['', 'Install Closure 144 Core']];
+const angkaAtauNull = v => { const s = String(v ?? '').replace(/\s/g, '').replace(',', '.'); if (s === '' || isNaN(Number(s))) return null; return Number(s); };
+const sisaDari = (t, r) => (t == null || r == null) ? null : Math.round((t - r) * 100) / 100;
+const triTeks = a => { if (!Array.isArray(a) || a.every(v => v == null)) return ''; return a.map(v => v == null ? '' : String(v)).join('/'); };
+const tglSlash = d => { const [y, m, h] = String(d).slice(0, 10).split('-'); return `${h}/${m}/${y}`; };
+function teksProgres(x){
+  const L = ['*Daily Report Progress*', tglSlash(x.tanggal), `Stasiun : ${x.stasiun || ''}`];
+  if (x.no_po) L.push(`No. PO : ${x.no_po}`);
+  if (x.hp_po) L.push(`HP PO : ${x.hp_po}`);
+  if (x.hp_pembangunan) L.push(`HP Pembangunan : ${x.hp_pembangunan}`);
+  if (x.hp_rfs) L.push(`HP RFS : ${x.hp_rfs}`);
+  [['OTB', x.otb], ['ODC', x.odc], ['ODP', x.odp]].forEach(([k, a]) => { const t = triTeks(a); if (t) L.push(`${k} : ${t}`); });
+  L.push('', 'TOTAL//PROGRESS// :');
+  if (x.segmen) L.push(`(${x.segmen.replace(/^\(|\)$/g, '')})`);
+  let grup = null;
+  (x.items || []).forEach(it => {
+    const g = (it.grup || '').trim();
+    if (g && g !== grup) L.push(`- ${g} :`);
+    grup = g || null;
+    const t = triTeks([it.target, it.realisasi, it.sisa]);
+    L.push(`- ${it.nama} :${t ? ' ' + t : ''}`);
+  });
+  L.push('', `Remark Aktivitas : ${x.remark || ''}`);
+  return L.join('\n');
+}
+
+/* ================= PROGRESS PEMBANGUNAN / CIVIL ================= */
+S.prg = [];
+async function muatProgres(diam){
+  const d = $('#gDari').value, s = $('#gSampai').value;
+  if (!d || !s || d > s) return toast('Rentang tanggal tidak valid.', 'bad');
+  if (!diam) $('#gBody').innerHTML = '<tr><td colspan="11"><div class="loading"><span class="spin"></span> Memuat…</div></td></tr>';
+  try {
+    S.prg = await rpc('admin_progres', {p_dari:d, p_sampai:s});
+    const v = $('#gTek').value, names = [...new Set([...S.akun.filter(a => (a.pekerjaan || []).includes('PROGRES')).map(a => a.nama), ...S.prg.map(x => x.teknisi)])].sort();
+    $('#gTek').innerHTML = '<option value="">Semua teknisi</option>' + names.map(n => `<option>${esc(n)}</option>`).join(''); $('#gTek').value = v;
+    renderProgres(); stempel();
+  } catch(e){ if (!diam) err(e); }
+}
+function prgFilter(){ const t = $('#gTek').value, q = $('#gCari').value.trim().toLowerCase();
+  return S.prg.filter(x => (!t || x.teknisi === t) && (!q || `${x.stasiun} ${x.no_po || ''}`.toLowerCase().includes(q))); }
+function renderProgres(){
+  const rows = prgFilter(), st = new Set(rows.map(x => `${x.stasiun}|${x.no_po || ''}`));
+  $('#gN').textContent = `${rows.length} report`;
+  $('#gKpi').innerHTML = [kpi('Report progress', rows.length, 't-e', 'rep', 'pada filter'), kpi('Stasiun / PO', st.size, 't-v', 'today', 'proyek berjalan'),
+    kpi('Teknisi pelapor', new Set(rows.map(x => x.teknisi)).size, 't-ok', 'tek', 'pembangunan / civil')].join('');
+  $('#gBody').innerHTML = rows.length ? rows.map(x => `<tr class="click" data-prg="${x.id}"><td class="num">${tglLabel(x.tanggal)} <span class="sub">${jamDari(x.waktu)}</span></td><td>${esc(x.teknisi)}</td>
+    <td><b>${esc(x.stasiun)}</b></td><td class="num">${esc(x.no_po || '-')}</td><td class="num">${esc(x.hp_po || '-')}</td><td class="num">${esc(x.hp_pembangunan || '-')}</td><td class="num">${esc(x.hp_rfs || '-')}</td>
+    <td class="num">${esc(triTeks(x.odc) || '-')}</td><td class="num">${esc(triTeks(x.odp) || '-')}</td><td class="wrapcell" style="min-width:200px">${esc(x.remark || '')}</td>
+    <td><button class="btn sm" type="button">Detail</button></td></tr>`).join('') : '<tr><td colspan="11" class="empty" style="padding-left:16px">Belum ada report progress pada filter ini.</td></tr>';
+}
+['#gTek', '#gCari'].forEach(s => $(s).addEventListener('input', renderProgres));
+$('#gMuat').addEventListener('click', () => muatProgres());
+$('#gBody').addEventListener('click', e => { const tr = e.target.closest('[data-prg]'); if (tr) detailProgres(S.prg.find(x => x.id === tr.dataset.prg)); });
+async function salinTeks(t){ try { await navigator.clipboard.writeText(t); toast('Report disalin. Tempel di WhatsApp.'); } catch(_){ toast('Tidak bisa menyalin otomatis. Blok teksnya lalu salin manual.', 'bad'); } }
+function detailProgres(x){
+  if (!x) return;
+  panel(`<div class="row"><div><h2 style="font-size:18px;margin:0">${esc(x.stasiun)}${x.no_po ? ` · PO ${esc(x.no_po)}` : ''}</h2><span class="sub">${esc(x.teknisi)} · ${esc(fWaktuD(x.waktu))}</span></div><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
+    <pre class="prg-pre">${esc(teksProgres(x))}</pre>
+    ${x.diedit_at ? `<p class="sub">Diedit oleh ${esc(x.diedit_oleh || 'Boss Ridho')} · ${esc(fWaktuD(x.diedit_at))}</p>` : ''}
+    <div class="row"><button class="btn pri sm" type="button" data-copy>Salin report</button><button class="btn sm" type="button" data-edit>Edit report</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus report</button></div>`);
+  $('#panel [data-copy]').addEventListener('click', () => salinTeks(teksProgres(x)));
+  $('#panel [data-edit]').addEventListener('click', () => editProgres(x));
+  $('#panel [data-hapus]').addEventListener('click', async e => {
+    const b = e.currentTarget;
+    if (b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Klik lagi untuk menghapus'; return; }
+    try { await rpc('admin_hapus_progres', {p_id:x.id}); tutup(); toast('Report progress dihapus.'); muatProgres(true); } catch(z){ err(z); }
+  });
+}
+function editProgres(x){
+  const E = JSON.parse(JSON.stringify(x)); E.items = E.items || []; ['otb','odc','odp'].forEach(k => { E[k] = E[k] || [null, null, null]; });
+  const nv = v => v == null ? '' : esc(String(v));
+  const itemRow = (it, i) => `<div class="ed-it" data-i="${i}"><input class="in g" data-f="grup" value="${nv(it.grup)}" placeholder="Grup (opsional)" maxlength="60"><input class="in n" data-f="nama" value="${nv(it.nama)}" placeholder="Nama item" maxlength="80">
+    <input class="in mono" data-f="target" value="${nv(it.target)}" placeholder="Target" inputmode="decimal"><input class="in mono" data-f="realisasi" value="${nv(it.realisasi)}" placeholder="Realisasi" inputmode="decimal"><input class="in mono" data-f="sisa" value="${nv(it.sisa)}" placeholder="Sisa" readonly tabindex="-1"><button class="ed-x" type="button" data-del aria-label="Hapus item">×</button></div>`;
+  panel(`<div class="row"><h2 style="font-size:18px">Edit report progress</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
+    <p class="sub">Teknisi: <b>${esc(x.teknisi)}</b> · ${esc(fWaktuD(x.waktu))}</p>
+    <form id="fEdPrg" class="stack" novalidate>
+      <div class="row"><label class="f" style="flex:1">Stasiun<input class="in" data-k="stasiun" value="${nv(E.stasiun)}" maxlength="150"></label><label class="f" style="flex:1">No. PO<input class="in mono" data-k="no_po" value="${nv(E.no_po)}" maxlength="60"></label></div>
+      <div class="row"><label class="f" style="flex:1">HP PO<input class="in mono" data-k="hp_po" value="${nv(E.hp_po)}" maxlength="20"></label><label class="f" style="flex:1">HP Pembangunan<input class="in mono" data-k="hp_pembangunan" value="${nv(E.hp_pembangunan)}" maxlength="20"></label><label class="f" style="flex:1">HP RFS<input class="in mono" data-k="hp_rfs" value="${nv(E.hp_rfs)}" maxlength="20"></label></div>
+      ${['otb','odc','odp'].map(k => `<div class="row" data-tri="${k}"><b style="width:44px">${k.toUpperCase()}</b>${[0,1,2].map(j => `<input class="in mono" style="flex:1;min-width:0" data-j="${j}" value="${nv(E[k][j])}" placeholder="${['Target','Realisasi','Sisa'][j]}" ${j === 2 ? 'readonly tabindex="-1"' : 'inputmode="decimal"'}>`).join('')}</div>`).join('')}
+      <label class="f">Segmen<input class="in" data-k="segmen" value="${nv(E.segmen)}" maxlength="150"></label>
+      <div class="ed-items"><div class="ed-it ed-h"><span>Grup</span><span>Item</span><span>Target</span><span>Realisasi</span><span>Sisa</span><span></span></div><div id="edItems" class="ed-items">${E.items.map(itemRow).join('')}</div></div>
+      <button class="btn sm" type="button" data-add style="justify-self:start">+ Tambah item</button>
+      <label class="f">Remark aktivitas<textarea class="in" data-k="remark" rows="3" maxlength="500">${nv(E.remark)}</textarea></label>
+      <div class="row"><button class="btn pri" type="submit">Simpan perubahan</button><button class="btn" type="button" data-batal>Batal</button></div>
+    </form>`);
+  const F = $('#fEdPrg');
+  F.addEventListener('input', e => {
+    const t = e.target, tri = t.closest('[data-tri]'), row = t.closest('.ed-it[data-i]');
+    if (t.dataset.k) E[t.dataset.k] = t.value;
+    if (tri){ const a = E[tri.dataset.tri]; a[t.dataset.j] = angkaAtauNull(t.value); a[2] = sisaDari(a[0], a[1]); tri.querySelector('[data-j="2"]').value = a[2] ?? ''; }
+    if (row){ const o = E.items[row.dataset.i]; if (['grup','nama'].includes(t.dataset.f)) o[t.dataset.f] = t.value;
+      else { o[t.dataset.f] = angkaAtauNull(t.value); o.sisa = sisaDari(o.target, o.realisasi); row.querySelector('[data-f="sisa"]').value = o.sisa ?? ''; } }
+  });
+  const ulang = () => { $('#edItems').innerHTML = E.items.map(itemRow).join(''); };
+  F.querySelector('[data-add]').addEventListener('click', () => { E.items.push({grup:'', nama:'', target:null, realisasi:null, sisa:null}); ulang(); });
+  $('#edItems').addEventListener('click', e => { const d = e.target.closest('[data-del]'); if (d){ E.items.splice(Number(d.closest('.ed-it').dataset.i), 1); ulang(); } });
+  F.querySelector('[data-batal]').addEventListener('click', () => detailProgres(x));
+  F.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!String(E.stasiun || '').trim()) return toast('Stasiun wajib diisi.', 'bad');
+    const items = E.items.filter(i => String(i.nama || '').trim()).map(i => ({grup:String(i.grup || '').trim(), nama:i.nama.trim(), target:i.target, realisasi:i.realisasi, sisa:i.sisa}));
+    const b = e.submitter; b.disabled = true;
+    try {
+      const r = await rpc('admin_ubah_progres', {p_id:x.id, p_stasiun:E.stasiun, p_no_po:E.no_po || '', p_hp_po:E.hp_po || '', p_hp_pembangunan:E.hp_pembangunan || '', p_hp_rfs:E.hp_rfs || '',
+        p_otb:E.otb, p_odc:E.odc, p_odp:E.odp, p_segmen:E.segmen || '', p_items:items, p_remark:E.remark || ''});
+      const i = S.prg.findIndex(z => z.id === x.id); if (i >= 0) S.prg[i] = r;
+      toast('Report progress diperbarui.'); detailProgres(r); renderProgres();
+    } catch(z){ err(z); } finally { b.disabled = false; }
+  });
+}
+$('#gXls').addEventListener('click', () => excel(`report-progress_${$('#gDari').value}_${$('#gSampai').value}.xlsx`, 'Progress',
+  ['Tanggal','Jam','Teknisi','Stasiun','No. PO','HP PO','HP Pembangunan','HP RFS','OTB','ODC','ODP','Segmen','Item Progress (target/realisasi/sisa)','Remark Aktivitas','Teks Report'],
+  prgFilter().map(x => [x.tanggal, fJamD.format(new Date(x.waktu)), x.teknisi, x.stasiun, x.no_po || '', x.hp_po || '', x.hp_pembangunan || '', x.hp_rfs || '',
+    triTeks(x.otb), triTeks(x.odc), triTeks(x.odp), x.segmen || '', (x.items || []).map(i => `${i.grup ? i.grup + ' - ' : ''}${i.nama}: ${triTeks([i.target, i.realisasi, i.sisa])}`).join('; '), x.remark || '', teksProgres(x)])));
+
 /* ================= AKUN ================= */
 async function muatAkun(diam){
   try { S.akun = await rpc('admin_daftar_akun', {}); renderAkun(); } catch(e){ if (!diam) err(e); }
@@ -859,13 +1018,14 @@ function renderAkun(){
   $('#akN').textContent = `· ${S.akun.length} akun`;
   $('#akBody').innerHTML = S.akun.map(a => `<tr${a.aktif ? '' : ' style="opacity:.6"'}><td><div class="row" style="flex-wrap:nowrap;gap:10px">${a.foto_profil ? `<img class="avsm" src="${esc(fotoUrl(a.foto_profil))}" alt="">` : `<span class="avsm">${esc(a.nama.split(/[\s-]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase())}</span>`}<b>${esc(a.nama)}</b></div></td><td class="num">${esc(a.username)}</td><td class="num">${a.password ? `<span class="pwtxt">${esc(a.password)}</span>` : '<span class="sub" title="Terlihat setelah akun ini login sekali atau password diatur ulang">belum tersedia</span>'}</td>
     <td>${a.role === 'superadmin' ? '<span class="pill e">BOSS RIDHO</span>' : '<span class="pill idle">TEKNISI</span>'}</td>
+    <td>${a.role === 'superadmin' ? '<span class="sub">-</span>' : (a.pekerjaan || ['IKR']).map(j => `<span class="pill ${j === 'IKR' ? 'e' : 'v'}" style="margin:2px">${j === 'IKR' ? 'IKR' : 'PEMBANGUNAN / CIVIL'}</span>`).join('')}</td>
     <td>${a.aktif ? '<span class="pill ok">AKTIF</span>' : '<span class="pill bad">NONAKTIF</span>'}</td>
     <td class="num">${esc(fTglId.format(new Date(a.created_at)))}</td>
     <td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" type="button" data-ak="${a.id}">Edit</button>${a.id === S.me.id ? '' : a.aktif
       ? `<button class="btn sm" type="button" data-off="${a.id}" style="color:var(--bad)">Nonaktifkan</button>` : `<button class="btn sm" type="button" data-on="${a.id}" style="color:var(--ok)">Aktifkan</button>`}</div></td></tr>`).join('');
 }
 function resetAkun(){
-  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); lihatPw($('#akPass'), false); $('#akRole').value = 'teknisi'; $('#akAktif').value = '1';
+  S.akEdit = null; ['#akNama','#akUser','#akPass'].forEach(s => $(s).value = ''); lihatPw($('#akPass'), false); $('#akRole').value = 'teknisi'; $('#akAktif').value = '1'; $('#akIkr').checked = true; $('#akPrg').checked = false;
   $('#akTitle').textContent = 'Tambah akun teknisi'; $('#akPassLbl').textContent = 'Password (min. 6 karakter)';
 }
 function bukaTambah(){ if (!S.akPrefill) resetAkun(); S.akPrefill = false; setTimeout(() => $('#akNama').focus(), 50); }
@@ -875,6 +1035,7 @@ $('#akBody').addEventListener('click', async e => {
     const a = S.akun.find(x => x.id === ed.dataset.ak); S.akEdit = a.id; S.akPrefill = true;
     $('#akNama').value = a.nama; $('#akUser').value = a.username; $('#akPass').value = a.password || ''; lihatPw($('#akPass'), true);
     $('#akRole').value = a.role; $('#akAktif').value = a.aktif ? '1' : '0';
+    const pk = a.pekerjaan || ['IKR']; $('#akIkr').checked = pk.includes('IKR'); $('#akPrg').checked = pk.includes('PROGRES');
     $('#akTitle').textContent = 'Edit akun ' + a.username; $('#akPassLbl').textContent = 'Password (ubah untuk mengganti, kosongkan jika tidak diganti)';
     location.hash = 'tambah';
   }
@@ -892,8 +1053,11 @@ $('#fAkun').addEventListener('submit', async e => {
   try {
     const lama = S.akEdit ? (S.akun.find(a => a.id === S.akEdit) || {}).password : null;
     const pass = S.akEdit && $('#akPass').value === (lama || '') ? '' : $('#akPass').value;
+    const pk = [$('#akIkr').checked && 'IKR', $('#akPrg').checked && 'PROGRES'].filter(Boolean);
+    if ($('#akRole').value === 'teknisi' && !pk.length) throw new Error('Pilih minimal satu jenis pekerjaan.');
     await rpc('admin_simpan_akun', {p_id:S.akEdit, p_username:$('#akUser').value.trim(), p_nama:$('#akNama').value.trim(), p_password:pass,
       p_role:$('#akRole').value, p_aktif:$('#akAktif').value === '1'});
+    if (pk.length) await rpc('admin_set_pekerjaan', {p_username:$('#akUser').value.trim(), p_pekerjaan:pk});
     toast(S.akEdit ? 'Akun diperbarui.' : 'Akun dibuat. Sudah bisa login di aplikasi teknisi.'); resetAkun(); location.hash = 'akun';
   } catch(x){ err(x); } finally { b.disabled = false; }
 });
@@ -1247,6 +1411,26 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
 .bukti{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;padding:8px}
 .bukti img{width:56px;height:74px;object-fit:cover;border-radius:8px;background:var(--sunk)}
 
+/* report progress (pembangunan FTTH / civil) */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tri-h,.trirow{display:grid;grid-template-columns:56px repeat(3,minmax(0,1fr));gap:8px;align-items:center}
+.tri-h{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.trirow b{font-size:14px}
+.trirow .in,.tri3 .in{padding:10px 9px;font-family:var(--mono);font-size:14px}
+.in.ro{background:var(--surface);color:var(--muted);border-style:dashed}
+.itm{border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:8px;background:var(--surface)}
+.itm + .itm{margin-top:8px}
+.itm-h{display:flex;gap:8px;align-items:center}
+.itm-h .in{flex:1;min-width:0;font-weight:700;padding:10px 11px}
+.itm-h .pill{flex:none}
+.xbtn{border:0;background:var(--bad-bg);color:var(--bad);width:38px;height:38px;border-radius:10px;font-size:20px;font-weight:700;flex:none;cursor:pointer}
+.tri3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tri3 small{display:block;font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.chipset{display:flex;flex-wrap:wrap;gap:6px}
+.chipset button{border:1px dashed var(--electric);background:var(--e-soft);border-radius:999px;padding:7px 11px;font-weight:700;font-size:12px;color:var(--electric-2);cursor:pointer}
+.prg-pre{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--sunk);border-radius:12px;padding:12px;margin-top:4px;display:none;overflow-wrap:anywhere}
+.item.open .prg-pre{display:block}
+
 /* navigasi bawah */
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:700;background:var(--surface);border-top:1px solid var(--line);
   padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(11,27,63,.06)}
@@ -1305,6 +1489,8 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
 
   <!-- REPORT -->
   <section id="vReport" class="view" hidden>
+    <div id="repJenis" class="seg" hidden><button type="button" data-j="IKR" aria-pressed="true">Report IKR</button><button type="button" data-j="PROGRES" aria-pressed="false">Pembangunan FTTH / Civil</button></div>
+    <div id="ikrWrap" class="stack" style="gap:16px">
     <form id="fRep" class="card stack" novalidate>
       <div class="row"><h2>FORM REPORT TEKNISI</h2><span class="spacer"></span><span class="pill e" id="repTgl"></span></div>
       <label class="f">Nama pelanggan <input id="rNamaPel" class="in" required maxlength="150" autocomplete="off"></label>
@@ -1339,6 +1525,42 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
       <div class="row"><h3>Riwayat report saya</h3><span class="spacer"></span><span id="riwN" class="sub"></span></div>
       <input id="hCari" class="in" placeholder="Cari nama / ID pelanggan" autocomplete="off">
       <div id="riwList" class="list"></div>
+    </div>
+    </div>
+
+    <div id="prgWrap" class="stack" style="gap:16px" hidden>
+    <form id="fPrg" class="card stack" novalidate>
+      <div class="row"><h2>DAILY REPORT PROGRESS</h2><span class="spacer"></span><span class="pill e" id="prgTgl"></span></div>
+      <button id="prgIsi" class="btn sm" type="button" style="justify-self:start">Isi dari report terakhir</button>
+      <div class="grid2">
+        <label class="f">Stasiun <input id="pStasiun" class="in" maxlength="150" list="dlStasiun" autocomplete="off" placeholder="Singosari"></label>
+        <label class="f">No. PO <input id="pPo" class="in mono" maxlength="60" autocomplete="off" placeholder="2025.06.00307"></label>
+      </div>
+      <div class="grid3">
+        <label class="f">HP PO <input id="pHpPo" class="in mono" maxlength="20" inputmode="decimal" autocomplete="off" placeholder="5.120"></label>
+        <label class="f">HP Pembangunan <input id="pHpBangun" class="in mono" maxlength="20" inputmode="decimal" autocomplete="off" placeholder="1024"></label>
+        <label class="f">HP RFS <input id="pHpRfs" class="in mono" maxlength="20" inputmode="decimal" autocomplete="off" placeholder="1024"></label>
+      </div>
+      <div class="stack" style="gap:8px">
+        <div class="tri-h"><span></span><span>Target</span><span>Realisasi</span><span>Sisa</span></div>
+        <div class="trirow" data-k="otb"><b>OTB</b><input class="in" data-j="0" inputmode="decimal"><input class="in" data-j="1" inputmode="decimal"><input class="in ro" data-j="2" readonly tabindex="-1"></div>
+        <div class="trirow" data-k="odc"><b>ODC</b><input class="in" data-j="0" inputmode="decimal"><input class="in" data-j="1" inputmode="decimal"><input class="in ro" data-j="2" readonly tabindex="-1"></div>
+        <div class="trirow" data-k="odp"><b>ODP</b><input class="in" data-j="0" inputmode="decimal"><input class="in" data-j="1" inputmode="decimal"><input class="in ro" data-j="2" readonly tabindex="-1"></div>
+      </div>
+      <h3 style="margin-top:6px">TOTAL PROGRESS</h3>
+      <label class="f">Segmen <input id="pSegmen" class="in" maxlength="150" autocomplete="off" placeholder="Segmen 512 i dan j"></label>
+      <div id="pItems"></div>
+      <div class="chipset" id="pPreset"></div>
+      <label class="f">Remark aktivitas <textarea id="pRemark" class="in" rows="3" maxlength="500" placeholder="Install ODP, ODC dan penarikan kabel 144 core"></textarea></label>
+      <p class="sub">Sisa dihitung otomatis (target − realisasi). Form tersimpan otomatis di HP selama belum dikirim.</p>
+      <div class="grid2"><button id="prgSalin" class="btn" type="button">SALIN REPORT</button><button id="btnPrg" class="btn pri" type="submit">SIMPAN REPORT</button></div>
+    </form>
+
+    <div class="card stack">
+      <div class="row"><h3>Riwayat report progress</h3><span class="spacer"></span><span id="prgN" class="sub"></span></div>
+      <input id="prgCari" class="in" placeholder="Cari stasiun / No. PO" autocomplete="off">
+      <div id="prgList" class="list"></div>
+    </div>
     </div>
   </section>
 
@@ -1528,7 +1750,7 @@ const S = {token:null, me:null, lokasi:[], absenHariIni:null, absensi:[], lapora
 async function rpc(name, params){
   const {data, error} = await sb.rpc(name, {p_token:S.token, ...params});
   if (error){ if (/Sesi berakhir/.test(error.message)) keluarLokal(); throw error; }
-  const j = {kirim_laporan:'report', absen:'absen', kasbon_ajukan:'kasbon', kasbon_batal:'kasbon', ubah_foto_profil:'profil'}[name];
+  const j = {kirim_laporan:'report', kirim_progres:'progres', absen:'absen', kasbon_ajukan:'kasbon', kasbon_batal:'kasbon', ubah_foto_profil:'profil'}[name];
   if (j) kabar(j);
   return data;
 }
@@ -1554,7 +1776,7 @@ $('#fLogin').addEventListener('submit', e => {
     await mulai();
   });
 });
-function keluarLokal(){ S.token = null; S.me = null; ls('st_token', null); location.hash = ''; tampil(); }
+function keluarLokal(){ S.token = null; S.me = null; S.prg = null; S.progres = []; ls('st_token', null); location.hash = ''; tampil(); }
 $('#btnLogout').addEventListener('click', () => { const t = S.token; keluarLokal(); if (t) sb.rpc('logout', {p_token:t}).then(() => {}, () => {}); });
 
 /* ---------------- navigasi ---------------- */
@@ -1570,7 +1792,7 @@ function tampil(){
   $('#topSub').textContent = login ? 'Technician App' : (S.me ? S.me.nama : '');
   if (!login && tab === 'akun') muatRingkasan().catch(() => {});
   if (!login && S.me && tab === 'absen') muatAbsensi().catch(() => {});
-  if (!login && S.me && tab === 'report') muatRiwayat().catch(() => {});
+  if (!login && S.me && tab === 'report'){ if (punya('IKR')) muatRiwayat().catch(() => {}); if (punya('PROGRES')) muatProgres().catch(() => {}); }
   if (!login && S.me && tab === 'finance'){ $('#finDot').hidden = true; muatKasbon().catch(() => {}); }
   if (!login && tab === 'absen'){ renderAbsen(); if (S.map) setTimeout(() => { S.map.invalidateSize(); petaUpdate(); }, 60); }
   window.scrollTo(0, 0);
@@ -1582,7 +1804,8 @@ async function mulai(){
     S.me = await rpc('profil_saya', {});
   } catch(e){ toast(pesan(e), 'bad'); return; }
   if (S.me.role !== 'teknisi'){ keluarLokal(); return toast('Akun Boss Ridho dipakai di dashboard.', 'bad'); }
-  isiProfil(); $('#rTek').value = S.me.nama; isiTeam(); $('#repTgl').textContent = fPendek.format(new Date());
+  isiProfil(); $('#rTek').value = S.me.nama; isiTeam(); $('#repTgl').textContent = fPendek.format(new Date()); $('#prgTgl').textContent = fPendek.format(new Date());
+  aturJenis();
   tampil();
   try {
     const l = await sb.from('lokasi').select('*').order('nama');
@@ -1590,7 +1813,7 @@ async function mulai(){
     $('#dlStasiun').innerHTML = S.lokasi.map(x => `<option value="${esc(x.nama)}">`).join('');
   } catch(_){}
   isiRekening();
-  await Promise.all([muatAbsensi().catch(e => toast(pesan(e), 'bad')), muatRiwayat().catch(e => toast(pesan(e), 'bad')), muatRingkasan().catch(() => {}), muatKasbon().catch(() => {})]);
+  await Promise.all([muatAbsensi().catch(e => toast(pesan(e), 'bad')), (punya('IKR') ? muatRiwayat() : Promise.resolve()).catch(e => toast(pesan(e), 'bad')), (punya('PROGRES') ? muatProgres(true) : Promise.resolve()).catch(e => toast(pesan(e), 'bad')), muatRingkasan().catch(() => {}), muatKasbon().catch(() => {})]);
   if (S.watch == null) mulaiGPS();
 }
 function isiProfil(){
@@ -1868,6 +2091,143 @@ $('#btnAbsen').addEventListener('click', e => busy(e.currentTarget, 'Mengirim…
   } catch(err){ toast(pesan(err), 'bad'); if (/SUDAH MELAKUKAN ABSENSI/.test(err.message)) muatAbsensi().catch(() => {}); }
 }));
 
+/* ---- Daily Report Progress: format teks salin (sama di APK & dashboard) ---- */
+const PRG_PRESET = [['', 'Pulling Cable 96 Core'], ['', 'Pulling Cable 144 Core'], ['Install Pole', 'Pole 6 M'], ['Install Pole', 'Pole 7 M'], ['Install Pole', 'Pole 9 M'],
+  ['', 'ODC'], ['', 'ODP'], ['', 'Install Closure 96 Core'], ['', 'Install Closure 144 Core']];
+const angkaAtauNull = v => { const s = String(v ?? '').replace(/\s/g, '').replace(',', '.'); if (s === '' || isNaN(Number(s))) return null; return Number(s); };
+const sisaDari = (t, r) => (t == null || r == null) ? null : Math.round((t - r) * 100) / 100;
+const triTeks = a => { if (!Array.isArray(a) || a.every(v => v == null)) return ''; return a.map(v => v == null ? '' : String(v)).join('/'); };
+const tglSlash = d => { const [y, m, h] = String(d).slice(0, 10).split('-'); return `${h}/${m}/${y}`; };
+function teksProgres(x){
+  const L = ['*Daily Report Progress*', tglSlash(x.tanggal), `Stasiun : ${x.stasiun || ''}`];
+  if (x.no_po) L.push(`No. PO : ${x.no_po}`);
+  if (x.hp_po) L.push(`HP PO : ${x.hp_po}`);
+  if (x.hp_pembangunan) L.push(`HP Pembangunan : ${x.hp_pembangunan}`);
+  if (x.hp_rfs) L.push(`HP RFS : ${x.hp_rfs}`);
+  [['OTB', x.otb], ['ODC', x.odc], ['ODP', x.odp]].forEach(([k, a]) => { const t = triTeks(a); if (t) L.push(`${k} : ${t}`); });
+  L.push('', 'TOTAL//PROGRESS// :');
+  if (x.segmen) L.push(`(${x.segmen.replace(/^\(|\)$/g, '')})`);
+  let grup = null;
+  (x.items || []).forEach(it => {
+    const g = (it.grup || '').trim();
+    if (g && g !== grup) L.push(`- ${g} :`);
+    grup = g || null;
+    const t = triTeks([it.target, it.realisasi, it.sisa]);
+    L.push(`- ${it.nama} :${t ? ' ' + t : ''}`);
+  });
+  L.push('', `Remark Aktivitas : ${x.remark || ''}`);
+  return L.join('\n');
+}
+
+/* ---------------- jenis report (diatur Boss Ridho per akun) ---------------- */
+const punya = j => ((S.me && S.me.pekerjaan) || ['IKR']).includes(j);
+function aturJenis(){
+  const dua = punya('IKR') && punya('PROGRES');
+  $('#repJenis').hidden = !dua;
+  let j = ls('st_rep_jenis');
+  if (!punya(j)) j = punya('IKR') ? 'IKR' : 'PROGRES';
+  pilihJenis(j);
+  if (punya('PROGRES')) prgMulai();
+}
+function pilihJenis(j){
+  ls('st_rep_jenis', j);
+  $('#ikrWrap').hidden = j !== 'IKR'; $('#prgWrap').hidden = j !== 'PROGRES';
+  document.querySelectorAll('#repJenis [data-j]').forEach(b => b.setAttribute('aria-pressed', b.dataset.j === j));
+}
+$('#repJenis').addEventListener('click', e => { const b = e.target.closest('[data-j]'); if (b){ pilihJenis(b.dataset.j); window.scrollTo(0, 0); } });
+
+/* ---------------- report progress ---------------- */
+S.prg = null; S.progres = [];
+const draftKey = () => 'st_prg_draft_' + (S.me ? S.me.username : '');
+function prgKosong(){ return {stasiun:'', no_po:'', hp_po:'', hp_pembangunan:'', hp_rfs:'', otb:[null,null,null], odc:[null,null,null], odp:[null,null,null], segmen:'', remark:'',
+  items:PRG_PRESET.map(([grup, nama]) => ({grup, nama, target:null, realisasi:null, sisa:null}))}; }
+function prgDari(x){ const c = JSON.parse(JSON.stringify(x));
+  return {stasiun:c.stasiun || '', no_po:c.no_po || '', hp_po:c.hp_po || '', hp_pembangunan:c.hp_pembangunan || '', hp_rfs:c.hp_rfs || '',
+    otb:c.otb || [null,null,null], odc:c.odc || [null,null,null], odp:c.odp || [null,null,null], segmen:c.segmen || '', remark:'',
+    items:(c.items || []).map(i => ({grup:i.grup || '', nama:i.nama, target:i.target ?? null, realisasi:i.realisasi ?? null, sisa:i.sisa ?? null}))}; }
+function prgMulai(){
+  if (S.prg) return;
+  let d = null; try { d = JSON.parse(ls(draftKey()) || 'null'); } catch(_){}
+  S.prg = d || prgKosong(); prgTulis();
+}
+const nilai = v => v == null ? '' : String(v);
+function prgTulis(){
+  const P = S.prg;
+  $('#pStasiun').value = P.stasiun; $('#pPo').value = P.no_po; $('#pHpPo').value = P.hp_po; $('#pHpBangun').value = P.hp_pembangunan; $('#pHpRfs').value = P.hp_rfs;
+  $('#pSegmen').value = P.segmen; $('#pRemark').value = P.remark;
+  document.querySelectorAll('#fPrg .trirow').forEach(r => r.querySelectorAll('[data-j]').forEach(i => { i.value = nilai(P[r.dataset.k][i.dataset.j]); }));
+  renderItems();
+}
+function renderItems(){
+  $('#pItems').innerHTML = S.prg.items.map((it, i) => `<div class="itm" data-i="${i}">
+    <div class="itm-h"><input class="in nm" value="${esc(it.nama)}" maxlength="80" aria-label="Nama item">${it.grup ? `<span class="pill idle">${esc(it.grup)}</span>` : ''}<button class="xbtn" type="button" data-del aria-label="Hapus item">×</button></div>
+    <div class="tri3"><label><small>Target</small><input class="in" data-f="target" inputmode="decimal" value="${esc(nilai(it.target))}"></label><label><small>Realisasi</small><input class="in" data-f="realisasi" inputmode="decimal" value="${esc(nilai(it.realisasi))}"></label><label><small>Sisa</small><input class="in ro" data-f="sisa" readonly tabindex="-1" value="${esc(nilai(it.sisa))}"></label></div>
+  </div>`).join('') || '<p class="empty">Belum ada item. Tambah lewat tombol di bawah.</p>';
+  const ada = new Set(S.prg.items.map(i => i.nama.toLowerCase()));
+  $('#pPreset').innerHTML = PRG_PRESET.filter(([, n]) => !ada.has(n.toLowerCase())).map(([g, n]) => `<button type="button" data-g="${esc(g)}" data-n="${esc(n)}">+ ${esc(n)}</button>`).join('') + '<button type="button" data-n="">+ Item lain</button>';
+}
+let drafT;
+function simpanDraf(){ clearTimeout(drafT); drafT = setTimeout(() => ls(draftKey(), JSON.stringify(S.prg)), 400); }
+$('#fPrg').addEventListener('input', e => {
+  const P = S.prg, t = e.target, map = {pStasiun:'stasiun', pPo:'no_po', pHpPo:'hp_po', pHpBangun:'hp_pembangunan', pHpRfs:'hp_rfs', pSegmen:'segmen', pRemark:'remark'};
+  if (map[t.id]) P[map[t.id]] = t.value;
+  const tr = t.closest('.trirow');
+  if (tr){ const a = P[tr.dataset.k]; a[t.dataset.j] = angkaAtauNull(t.value); a[2] = sisaDari(a[0], a[1]); tr.querySelector('[data-j="2"]').value = nilai(a[2]); }
+  const it = t.closest('.itm');
+  if (it){ const o = P.items[it.dataset.i];
+    if (t.classList.contains('nm')) o.nama = t.value;
+    else { o[t.dataset.f] = angkaAtauNull(t.value); o.sisa = sisaDari(o.target, o.realisasi); it.querySelector('[data-f="sisa"]').value = nilai(o.sisa); } }
+  simpanDraf();
+});
+$('#pItems').addEventListener('click', e => { const d = e.target.closest('[data-del]'); if (!d) return; S.prg.items.splice(Number(d.closest('.itm').dataset.i), 1); renderItems(); simpanDraf(); });
+$('#pPreset').addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (!b) return;
+  const g = b.dataset.g || '', n = b.dataset.n, at = g ? S.prg.items.map(i => i.grup).lastIndexOf(g) : -1;
+  const baru = {grup:g, nama:n, target:null, realisasi:null, sisa:null};
+  if (at >= 0) S.prg.items.splice(at + 1, 0, baru); else S.prg.items.push(baru);
+  renderItems(); simpanDraf();
+  const idx = S.prg.items.indexOf(baru), el = $(`#pItems .itm[data-i="${idx}"] ${n ? '[data-f="target"]' : '.nm'}`); if (el) el.focus();
+});
+function prgData(){ const P = S.prg; return {...P, tanggal:hariIni(), items:P.items.filter(i => i.nama.trim()).map(i => ({...i, nama:i.nama.trim()}))}; }
+$('#prgSalin').addEventListener('click', () => { const x = prgData(); if (!x.stasiun.trim()) return toast('Isi stasiun dulu.', 'bad'); salin(teksProgres(x)); });
+$('#prgIsi').addEventListener('click', async () => {
+  try { if (!S.progres.length) await muatProgres(); } catch(_){}
+  if (!S.progres.length) return toast('Belum ada report progress sebelumnya.', 'bad');
+  S.prg = prgDari(S.progres[0]); prgTulis(); simpanDraf(); toast('Terisi dari report ' + tglSlash(S.progres[0].tanggal) + '. Perbarui angka hari ini.');
+});
+$('#fPrg').addEventListener('submit', e => {
+  e.preventDefault();
+  const x = prgData();
+  if (!x.stasiun.trim()){ $('#pStasiun').focus(); return toast('Stasiun wajib diisi.', 'bad'); }
+  if (!x.remark.trim()){ $('#pRemark').focus(); return toast('Remark aktivitas wajib diisi.', 'bad'); }
+  busy($('#btnPrg'), 'Menyimpan…', async () => {
+    try {
+      await rpc('kirim_progres', {p_stasiun:x.stasiun, p_no_po:x.no_po, p_hp_po:x.hp_po, p_hp_pembangunan:x.hp_pembangunan, p_hp_rfs:x.hp_rfs,
+        p_otb:x.otb, p_odc:x.odc, p_odp:x.odp, p_segmen:x.segmen, p_items:x.items, p_remark:x.remark});
+      ls(draftKey(), null);
+      toast('REPORT PROGRESS BERHASIL DISIMPAN. Ketuk SALIN REPORT untuk WhatsApp.');
+      await muatProgres();
+    } catch(err){ toast(pesan(err), 'bad'); }
+  });
+});
+async function muatProgres(awal){
+  S.progres = await rpc('progres_saya', {});
+  if (awal && !ls(draftKey()) && S.progres.length && S.prg){ S.prg = prgDari(S.progres[0]); prgTulis(); }
+  renderProgres();
+}
+function renderProgres(){
+  const q = $('#prgCari').value.trim().toLowerCase();
+  const rows = q ? S.progres.filter(x => `${x.stasiun} ${x.no_po || ''}`.toLowerCase().includes(q)) : S.progres;
+  $('#prgN').textContent = `${rows.length} report`;
+  $('#prgList').innerHTML = rows.length ? rows.map(x => `<div class="item" data-id="${x.id}">
+      <div style="min-width:0"><b>${esc(x.stasiun)}</b>${x.no_po ? ` <span class="sub mono">PO ${esc(x.no_po)}</span>` : ''}<br>
+      <small>${esc(fWaktu.format(new Date(x.waktu)))}${triTeks(x.odp) ? ` · ODP ${esc(triTeks(x.odp))}` : ''} · ${(x.items || []).length} item</small></div>
+      <div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" type="button" data-lihat>Detail</button><button class="btn sm" type="button" data-salin>Salin</button></div>
+      <div class="prg-pre">${esc(teksProgres(x))}</div></div>`).join('') : `<p class="empty">${q ? 'Tidak ada report yang cocok.' : 'Belum ada report progress.'}</p>`;
+}
+$('#prgCari').addEventListener('input', renderProgres);
+$('#prgList').addEventListener('click', e => { const it = e.target.closest('.item'); if (!it) return; const x = S.progres.find(r => r.id === it.dataset.id);
+  if (e.target.closest('[data-salin]')) salin(teksProgres(x)); if (e.target.closest('[data-lihat]')) it.classList.toggle('open'); });
+
 /* ---------------- finance / kasbon ---------------- */
 const fRp = n => 'Rp' + Math.round(Number(n) || 0).toLocaleString('id-ID');
 const bulanIni = () => hariIni().slice(0, 7);
@@ -1975,7 +2335,7 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
   // sinkron otomatis dengan dashboard: data yang diedit/dihapus Boss Ridho ikut berubah di APK
   pasangLive();
   const sinkron = S.sinkron = () => { if (!S.token || document.visibilityState !== 'visible' || !$('#camModal').hidden) return;
-    muatAbsensi().catch(() => {}); muatRiwayat().catch(() => {}); muatRingkasan().catch(() => {}); muatKasbon().catch(() => {}); };
+    muatAbsensi().catch(() => {}); if (punya('IKR')) muatRiwayat().catch(() => {}); if (punya('PROGRES')) muatProgres().catch(() => {}); muatRingkasan().catch(() => {}); muatKasbon().catch(() => {}); };
   document.addEventListener('visibilitychange', sinkron);
   setInterval(sinkron, 20000);
 })();
