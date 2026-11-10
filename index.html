@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261110121525">
+<meta name="starlite-build" content="20261110173111">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,6 +207,27 @@ main{min-width:0;padding:calc(26px + env(safe-area-inset-top,0px)) max(28px,env(
 .ed-x{border:0;border-radius:9px;background:var(--bad-bg);color:var(--bad);height:34px;font-size:18px;font-weight:700;cursor:pointer}
 @media (max-width:560px){.ed-it{grid-template-columns:1fr 1fr 1fr 36px}.ed-it .g,.ed-it .n{grid-column:1/-1}}
 
+/* summary plan vs aktual */
+.pvg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:1100px){.pvg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.pvg{grid-template-columns:1fr}}
+.pv{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--surface);display:grid;gap:8px;min-width:0}
+.pv .t{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--muted)}
+.pv .t .pct{margin-left:auto;font-family:var(--mono);font-size:14px;color:var(--ink)}
+.pv .v{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.1;overflow-wrap:anywhere}
+.pv .v small{font-size:14px;color:var(--muted);font-weight:500}
+.pv .tr{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden;position:relative}
+.pv .tr i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--electric),var(--ok))}
+.pv .f{display:flex;gap:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.pv .f b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.pv.done .tr i{background:var(--ok)}
+.pbar{display:flex;align-items:center;gap:8px;min-width:120px}
+.pbar .tr{flex:1;height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.pbar .tr i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--electric),var(--ok))}
+.pbar span{font-family:var(--mono);font-size:12px;width:38px;text-align:right}
+.cell2{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.cell2 small{display:block;color:var(--muted);font-size:11px}
+
 /* komponen */
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0;box-shadow:var(--shadow)}
 .card h2{margin:0;font-size:15px;font-weight:700}
@@ -362,6 +383,11 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
       </div>
     </div>
     <div id="kpis" class="kpis six"><div class="loading"><span class="spin"></span> Memuat statistik…</div></div>
+    <div id="hPrgCard" class="card stack" hidden>
+      <div class="row"><h2>Progress pembangunan FTTH / civil · plan vs aktual</h2><span class="spacer"></span><span id="hPrgLbl" class="sub"></span><a class="btn sm" href="#progres">Monitoring progress</a></div>
+      <div id="hPrg" class="pvg"></div>
+      <div id="hPrjList" class="stack" style="gap:10px"></div>
+    </div>
     <div class="g2">
       <div class="card"><div class="row"><h2>Absensi &amp; report 14 hari terakhir</h2><span class="spacer"></span><span class="sub">Arahkan kursor ke grafik untuk angka</span></div><div class="chart"><canvas id="chHarian" aria-label="Grafik absensi dan report harian" role="img"></canvas></div></div>
       <div class="card"><div class="row"><h2>Top teknisi</h2><span class="spacer"></span><span class="sub">report 30 hari</span></div><div id="lb" class="lb"></div></div>
@@ -426,6 +452,17 @@ td.wrapcell{white-space:normal;min-width:220px;max-width:360px}
       <label class="f" style="flex:1;min-width:200px">Stasiun / No. PO <input id="gCari" class="in" placeholder="Cari stasiun atau PO"></label>
       <button id="gMuat" class="btn pri" type="button">Tampilkan</button>
       <button id="gXls" class="btn xl" type="button">Excel</button>
+    </div>
+    <div class="card stack">
+      <div class="row"><h2>Summary progress · plan vs aktual</h2><span class="spacer"></span><span id="gSumLbl" class="sub"></span></div>
+      <div id="gSum" class="pvg"></div>
+      <p class="sub" style="margin:0">Dihitung dari report <b>terakhir</b> setiap proyek (stasiun + No. PO) sampai tanggal "Sampai", karena angka di Daily Report Progress bersifat kumulatif.</p>
+    </div>
+    <div class="card" style="padding:0">
+      <div class="row" style="padding:16px 20px 12px"><h2>Progress per proyek</h2><span class="spacer"></span><span id="gPrjN" class="count"></span></div>
+      <div class="tablewrap" style="border:0;border-radius:0;border-top:1px solid var(--line)">
+        <table><thead><tr><th>Stasiun · No. PO</th><th>Update terakhir</th><th>Kabel (m)</th><th>Tiang</th><th>ODC</th><th>ODP</th><th>Closure</th><th>HP RFS / HP PO</th><th>Progress rata-rata</th></tr></thead><tbody id="gPrj"></tbody></table>
+      </div>
     </div>
     <div id="gKpi" class="kpis"></div>
     <div class="card" style="padding:0">
@@ -652,8 +689,8 @@ async function muatRingkasan(diam){
   try {
     const t = hariIni();
     const [st, lap, abs, prg] = await Promise.all([rpc('admin_statistik', {p_hari:14}), rpc('admin_laporan', {p_dari:t, p_sampai:t}), rpc('admin_absensi', {p_dari:t, p_sampai:t}),
-      rpc('admin_progres', {p_dari:t, p_sampai:t}).catch(() => [])]);
-    S.prgHari = prg;
+      rpc('admin_progres', {p_dari:'2000-01-01', p_sampai:t}).catch(() => [])]);
+    S.prgSemua = prg; S.prgHari = prg.filter(x => x.tanggal === t);
     S.stat = st; renderRingkasan(lap, abs); stempel();
   } catch(e){ if (!diam) err(e); }
 }
@@ -691,6 +728,7 @@ function renderRingkasan(lap, abs){
   $('#terbaru').innerHTML = lap.length ? lap.slice(0, 12).map(x => `<tr class="click" data-rep="${x.id}"><td class="num">${jamDari(x.waktu)}</td><td>${esc(x.teknisi)}</td><td>${esc(x.nama_pelanggan)}</td><td class="num">${esc(x.id_pelanggan)}</td><td class="num">${esc(x.odp)}</td><td class="num">${esc(x.port)}</td><td class="num">${fmtM(x.panjang_kabel)} m</td></tr>`).join('')
     : '<tr><td colspan="7" class="empty" style="padding-left:20px">Belum ada report hari ini.</td></tr>';
   S.lapHariIni = lap; S.absHariIni = abs;
+  renderHomePrg();
   grafik();
 }
 $('#kasWait').addEventListener('click', e => { const r = e.target.closest('[data-kas]'); if (r) detailKasbon(S.kasbon.find(k => k.id === r.dataset.kas)); });
@@ -927,7 +965,8 @@ async function muatProgres(diam){
   if (!d || !s || d > s) return toast('Rentang tanggal tidak valid.', 'bad');
   if (!diam) $('#gBody').innerHTML = '<tr><td colspan="11"><div class="loading"><span class="spin"></span> Memuat…</div></td></tr>';
   try {
-    S.prg = await rpc('admin_progres', {p_dari:d, p_sampai:s});
+    S.prgAll = await rpc('admin_progres', {p_dari:'2000-01-01', p_sampai:s});
+    S.prg = S.prgAll.filter(x => x.tanggal >= d);
     const v = $('#gTek').value, names = [...new Set([...S.akun.filter(a => (a.pekerjaan || []).includes('PROGRES')).map(a => a.nama), ...S.prg.map(x => x.teknisi)])].sort();
     $('#gTek').innerHTML = '<option value="">Semua teknisi</option>' + names.map(n => `<option>${esc(n)}</option>`).join(''); $('#gTek').value = v;
     renderProgres(); stempel();
@@ -935,8 +974,66 @@ async function muatProgres(diam){
 }
 function prgFilter(){ const t = $('#gTek').value, q = $('#gCari').value.trim().toLowerCase();
   return S.prg.filter(x => (!t || x.teknisi === t) && (!q || `${x.stasiun} ${x.no_po || ''}`.toLowerCase().includes(q))); }
+/* ---- agregat plan vs aktual (report terakhir per proyek) ---- */
+const KAT_PRG = [
+  ['kabel', 'Total kabel tertarik', 'm', it => /cable|kabel/i.test(it.nama)],
+  ['tiang', 'Tiang terpasang', 'tiang', it => /pole|tiang/i.test(it.nama)],
+  ['odc', 'ODC terpasang', 'unit', it => /\bodc\b/i.test(it.nama), 'odc'],
+  ['odp', 'ODP terpasang', 'unit', it => /\bodp\b/i.test(it.nama), 'odp'],
+  ['closure', 'Closure terpasang', 'unit', it => /clo?u?sure/i.test(it.nama)]
+];
+const hpAngka = v => Number(String(v || '').replace(/\./g, '').replace(',', '.')) || 0;
+function terakhirPerProyek(list){ const m = new Map(); list.forEach(x => { const k = `${x.stasiun}|${x.no_po || ''}`; if (!m.has(k)) m.set(k, x); }); return [...m.values()]; }
+function nilaiProyek(x){
+  const A = {};
+  KAT_PRG.forEach(([k, , , f, hdr]) => {
+    const its = (x.items || []).filter(f);
+    if (its.length) A[k] = {plan:its.reduce((t, i) => t + (Number(i.target) || 0), 0), aktual:its.reduce((t, i) => t + (Number(i.realisasi) || 0), 0)};
+    else if (hdr && Array.isArray(x[hdr]) && (x[hdr][0] != null || x[hdr][1] != null)) A[k] = {plan:Number(x[hdr][0]) || 0, aktual:Number(x[hdr][1]) || 0};
+  });
+  if (x.hp_po || x.hp_rfs) A.hp = {plan:hpAngka(x.hp_po), aktual:hpAngka(x.hp_rfs)};
+  return A;
+}
+function agregatPrg(proyek){
+  const T = {};
+  proyek.forEach(x => { const A = nilaiProyek(x); Object.entries(A).forEach(([k, v]) => { T[k] = T[k] || {plan:0, aktual:0}; T[k].plan += v.plan; T[k].aktual += v.aktual; }); });
+  return T;
+}
+const persen = (a, p) => p > 0 ? Math.max(0, Math.min(100, Math.round(a / p * 100))) : null;
+const angkaId = n => Number(n || 0).toLocaleString('id-ID', {maximumFractionDigits:2});
+function kartuPv(T){
+  const K = [...KAT_PRG.map(([k, l, u]) => [k, l, u]), ['hp', 'HP RFS dari HP PO', 'HP']];
+  return K.filter(([k]) => T[k]).map(([k, l, u]) => { const v = T[k], p = persen(v.aktual, v.plan), sisa = Math.max(0, v.plan - v.aktual);
+    return `<div class="pv${p === 100 ? ' done' : ''}"><div class="t">${esc(l)}<span class="pct">${p == null ? '-' : p + '%'}</span></div>
+      <div class="v">${angkaId(v.aktual)}<small> / ${angkaId(v.plan)} ${u}</small></div>
+      <div class="tr"><i style="width:${p || 0}%"></i></div>
+      <div class="f"><span>Plan <b>${angkaId(v.plan)}</b></span><span>Aktual <b>${angkaId(v.aktual)}</b></span><span>Sisa <b>${angkaId(sisa)}</b></span></div></div>`; }).join('')
+    || '<p class="empty">Belum ada angka plan / aktual pada report progress.</p>';
+}
+function rataProyek(A){ const ps = Object.values(A).map(v => persen(v.aktual, v.plan)).filter(v => v != null); return ps.length ? Math.round(ps.reduce((t, v) => t + v, 0) / ps.length) : null; }
+const pbar = p => p == null ? '<span class="sub">-</span>' : `<div class="pbar"><div class="tr"><i style="width:${p}%"></i></div><span>${p}%</span></div>`;
+function renderHomePrg(){
+  const all = S.prgSemua || [], proyek = terakhirPerProyek(all);
+  $('#hPrgCard').hidden = !proyek.length; if (!proyek.length) return;
+  $('#hPrgLbl').textContent = `${proyek.length} proyek · ${(S.prgHari || []).length} report hari ini`;
+  $('#hPrg').innerHTML = kartuPv(agregatPrg(proyek));
+  $('#hPrjList').innerHTML = proyek.slice(0, 6).map(x => { const p = rataProyek(nilaiProyek(x));
+    return `<div class="row" style="flex-wrap:nowrap;gap:12px;cursor:pointer" data-prj="${x.id}"><div style="min-width:0;flex:1"><b>${esc(x.stasiun)}</b>${x.no_po ? ` <span class="sub mono">PO ${esc(x.no_po)}</span>` : ''}<br><span class="sub">update ${esc(tglLabel(x.tanggal))} · ${esc(x.teknisi)}</span></div><div style="width:min(260px,45%)">${pbar(p)}</div></div>`; }).join('');
+}
+$('#hPrjList').addEventListener('click', e => { const r = e.target.closest('[data-prj]'); if (r) detailProgres((S.prgSemua || []).find(x => x.id === r.dataset.prj)); });
 function renderProgres(){
   const rows = prgFilter(), st = new Set(rows.map(x => `${x.stasiun}|${x.no_po || ''}`));
+  // summary plan vs aktual: report terakhir per proyek (filter teknisi & cari ikut berlaku)
+  const t = $('#gTek').value, q = $('#gCari').value.trim().toLowerCase();
+  const proyek = terakhirPerProyek((S.prgAll || []).filter(x => (!t || x.teknisi === t) && (!q || `${x.stasiun} ${x.no_po || ''}`.toLowerCase().includes(q))));
+  $('#gSumLbl').textContent = `${proyek.length} proyek · sampai ${tglLabel($('#gSampai').value)}`;
+  $('#gSum').innerHTML = proyek.length ? kartuPv(agregatPrg(proyek)) : '<p class="empty">Belum ada report progress.</p>';
+  $('#gPrjN').textContent = `${proyek.length} proyek`;
+  const c2 = v => v ? `<div class="cell2">${angkaId(v.aktual)} / ${angkaId(v.plan)}<small>${persen(v.aktual, v.plan) ?? '-'}%</small></div>` : '<span class="sub">-</span>';
+  $('#gPrj').innerHTML = proyek.length ? proyek.map(x => { const A = nilaiProyek(x);
+    return `<tr class="click" data-prg-all="${x.id}"><td><b>${esc(x.stasiun)}</b>${x.no_po ? `<br><span class="sub mono">PO ${esc(x.no_po)}</span>` : ''}</td><td class="num">${tglLabel(x.tanggal)}<br><span class="sub">${esc(x.teknisi)}</span></td>
+      <td>${c2(A.kabel)}</td><td>${c2(A.tiang)}</td><td>${c2(A.odc)}</td><td>${c2(A.odp)}</td><td>${c2(A.closure)}</td><td>${c2(A.hp)}</td><td style="min-width:150px">${pbar(rataProyek(A))}</td></tr>`; }).join('')
+    : '<tr><td colspan="9" class="empty" style="padding-left:16px">Belum ada proyek.</td></tr>';
   $('#gN').textContent = `${rows.length} report`;
   $('#gKpi').innerHTML = [kpi('Report progress', rows.length, 't-e', 'rep', 'pada filter'), kpi('Stasiun / PO', st.size, 't-v', 'today', 'proyek berjalan'),
     kpi('Teknisi pelapor', new Set(rows.map(x => x.teknisi)).size, 't-ok', 'tek', 'pembangunan / civil')].join('');
@@ -947,6 +1044,7 @@ function renderProgres(){
 }
 ['#gTek', '#gCari'].forEach(s => $(s).addEventListener('input', renderProgres));
 $('#gMuat').addEventListener('click', () => muatProgres());
+$('#gPrj').addEventListener('click', e => { const tr = e.target.closest('[data-prg-all]'); if (tr) detailProgres((S.prgAll || []).find(x => x.id === tr.dataset.prgAll)); });
 $('#gBody').addEventListener('click', e => { const tr = e.target.closest('[data-prg]'); if (tr) detailProgres(S.prg.find(x => x.id === tr.dataset.prg)); });
 async function salinTeks(t){ try { await navigator.clipboard.writeText(t); toast('Report disalin. Tempel di WhatsApp.'); } catch(_){ toast('Tidak bisa menyalin otomatis. Blok teksnya lalu salin manual.', 'bad'); } }
 function detailProgres(x){
@@ -960,7 +1058,7 @@ function detailProgres(x){
   $('#panel [data-hapus]').addEventListener('click', async e => {
     const b = e.currentTarget;
     if (b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Klik lagi untuk menghapus'; return; }
-    try { await rpc('admin_hapus_progres', {p_id:x.id}); tutup(); toast('Report progress dihapus.'); muatProgres(true); } catch(z){ err(z); }
+    try { await rpc('admin_hapus_progres', {p_id:x.id}); tutup(); toast('Report progress dihapus.'); if (halaman() === 'progres') muatProgres(true); else muatRingkasan(true); } catch(z){ err(z); }
   });
 }
 function editProgres(x){
@@ -1000,7 +1098,7 @@ function editProgres(x){
     try {
       const r = await rpc('admin_ubah_progres', {p_id:x.id, p_stasiun:E.stasiun, p_no_po:E.no_po || '', p_hp_po:E.hp_po || '', p_hp_pembangunan:E.hp_pembangunan || '', p_hp_rfs:E.hp_rfs || '',
         p_otb:E.otb, p_odc:E.odc, p_odp:E.odp, p_segmen:E.segmen || '', p_items:items, p_remark:E.remark || ''});
-      const i = S.prg.findIndex(z => z.id === x.id); if (i >= 0) S.prg[i] = r;
+      [S.prg, S.prgAll, S.prgSemua].forEach(arr => { if (!arr) return; const i = arr.findIndex(z => z.id === x.id); if (i >= 0) arr[i] = r; }); if (halaman() === 'ringkasan') renderHomePrg();
       toast('Report progress diperbarui.'); detailProgres(r); renderProgres();
     } catch(z){ err(z); } finally { b.disabled = false; }
   });
@@ -1445,6 +1543,15 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
 .pb.done .pb-t i{background:var(--ok)}
 .pb-g{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
 
+/* tarik ke bawah untuk refresh */
+html,body{overscroll-behavior-y:contain}
+#ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);transform:translate(-50%,-90px);z-index:60;width:46px;height:46px;border-radius:50%;background:var(--surface);box-shadow:0 6px 18px rgba(11,27,63,.22);display:grid;place-items:center;transition:transform .25s;pointer-events:none}
+#ptr svg{width:22px;height:22px;stroke:var(--electric);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#ptr.siap svg{stroke:var(--ok)}
+#ptr.jalan svg{animation:sp .8s linear infinite}
+.ver{text-align:center;font-size:12px;color:var(--muted);margin:2px 0 0}
+.ver b{color:var(--ink)}
+
 /* navigasi bawah */
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:700;background:var(--surface);border-top:1px solid var(--line);
   padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(11,27,63,.06)}
@@ -1729,6 +1836,7 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
       </form>
     </details>
     <button id="btnLogout" class="btn big" type="button">Keluar dari akun</button>
+    <p class="ver" id="verInfo"></p>
   </section>
 </main>
 
@@ -2312,6 +2420,40 @@ $('#prgCari').addEventListener('input', renderProgres);
 $('#prgList').addEventListener('click', e => { const it = e.target.closest('.item'); if (!it) return; const x = S.progres.find(r => r.id === it.dataset.id);
   if (e.target.closest('[data-salin]')) salin(teksProgres(x)); if (e.target.closest('[data-lihat]')) it.classList.toggle('open'); });
 
+/* ---------------- tarik ke bawah untuk refresh + info versi ---------------- */
+function amanReload(){
+  if (!$('#camModal').hidden || S.selfie || (S.fotos && S.fotos.length)) return false;
+  return !['#rNamaPel','#rIdPel','#rSn','#rOdc','#rOdp','#rPort','#kNom','#kKep'].some(q => $(q) && $(q).value.trim());
+}
+window.__amanReload = () => amanReload() && !(document.activeElement && document.activeElement.matches('input,textarea,select'));
+async function segarPenuh(){
+  if (!S.token || amanReload()){ location.reload(); return new Promise(() => {}); }   // ambil versi aplikasi & data terbaru
+  await Promise.allSettled([muatAbsensi(), punya('IKR') ? muatRiwayat() : 0, punya('PROGRES') ? muatProgres() : 0, muatRingkasan(), muatKasbon()]);
+  toast('Data diperbarui. Form yang sedang diisi tidak dihapus.');
+}
+(() => {
+  const el = document.createElement('div'); el.id = 'ptr'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v5h-5"/></svg>'; document.body.appendChild(el);
+  let y0 = null, dy = 0, jalan = false;
+  const bisa = () => !jalan && window.scrollY <= 0 && $('#camModal').hidden;
+  document.addEventListener('touchstart', e => { y0 = bisa() && e.touches.length === 1 ? e.touches[0].clientY : null; dy = 0; }, {passive:true});
+  document.addEventListener('touchmove', e => {
+    if (y0 == null) return; dy = e.touches[0].clientY - y0;
+    if (dy <= 0 || window.scrollY > 0){ el.style.transform = ''; return; }
+    const d = Math.min(dy, 150); el.style.transition = 'none';
+    el.style.transform = `translate(-50%, ${d * .65 - 90}px) rotate(${d * 2.4}deg)`; el.classList.toggle('siap', dy > 95);
+  }, {passive:true});
+  document.addEventListener('touchend', async () => {
+    if (y0 == null) return; y0 = null; el.style.transition = '';
+    if (dy > 95 && window.scrollY <= 0){ jalan = true; el.classList.add('jalan'); el.style.transform = 'translate(-50%, 6px)'; try { await segarPenuh(); } finally { jalan = false; el.classList.remove('jalan', 'siap'); } }
+    el.style.transform = ''; dy = 0;
+  });
+  const b = (document.querySelector('meta[name="starlite-build"]') || {}).content || '';
+  const tgl = b.length >= 12 ? `${b.slice(6, 8)}/${b.slice(4, 6)}/${b.slice(0, 4)} ${b.slice(8, 10)}.${b.slice(10, 12)}` : '-';
+  const online = /^https:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname);
+  $('#verInfo').innerHTML = `Versi aplikasi <b>${tgl}</b> · ${online ? 'update otomatis aktif' : 'mode lokal'}<br>Tarik layar ke bawah untuk refresh`;
+})();
+
 /* ---------------- finance / kasbon ---------------- */
 const fRp = n => 'Rp' + Math.round(Number(n) || 0).toLocaleString('id-ID');
 const bulanIni = () => hariIni().slice(0, 7);
@@ -2455,11 +2597,12 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
     if (!/^https:$/.test(location.protocol) || /^(localhost|127\.)/.test(location.hostname)) return;
     var kini = (document.querySelector('meta[name="starlite-build"]') || {}).content, terakhir = 0, banner = null;
     function periksa(){
-      if (document.visibilityState !== 'visible' || Date.now() - terakhir < 120000) return;
+      if (document.visibilityState !== 'visible' || Date.now() - terakhir < 20000) return;
       terakhir = Date.now();
       fetch(location.pathname + '?cek=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.text() : ''; }).then(function(t){
         var m = t.match(/name="starlite-build" content="(\d+)"/);
         if (!m || !kini || m[1] === kini || banner) return;
+        if (window.__amanReload && window.__amanReload()) { location.reload(); return; }   // tidak ada isian yang belum dikirim -> langsung pakai versi baru
         banner = document.createElement('div');
         banner.setAttribute('role', 'status');
         banner.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);width:max-content;top:calc(12px + env(safe-area-inset-top,0px));z-index:2000;background:#0B1B3F;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25);font:600 14px/1.4 system-ui,sans-serif;max-width:calc(100% - 24px)';
@@ -2470,7 +2613,7 @@ document.querySelectorAll('input[type="password"]').forEach(inp => {
     }
     document.addEventListener('visibilitychange', periksa);
     setInterval(periksa, 300000);
-    setTimeout(periksa, 15000);
+    setTimeout(periksa, 8000);
   }
 })();
 </script>
