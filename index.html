@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261110113856">
+<meta name="starlite-build" content="20261110121525">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1431,6 +1431,20 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
 .prg-pre{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--sunk);border-radius:12px;padding:12px;margin-top:4px;display:none;overflow-wrap:anywhere}
 .item.open .prg-pre{display:block}
 
+/* summary progress di menu akun */
+.hp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hp3 div{background:var(--sunk);border-radius:12px;padding:10px;min-width:0}
+.hp3 span{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.hp3 b{display:block;font-family:var(--mono);font-size:18px;overflow-wrap:anywhere}
+.pb{display:grid;gap:5px}
+.pb-h{display:flex;gap:8px;align-items:baseline;font-size:14px}
+.pb-h b{min-width:0;overflow-wrap:anywhere}
+.pb-h span{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+.pb-t{height:9px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.pb-t i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--electric),#3FD68F)}
+.pb.done .pb-t i{background:var(--ok)}
+.pb-g{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+
 /* navigasi bawah */
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:700;background:var(--surface);border-top:1px solid var(--line);
   padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(11,27,63,.06)}
@@ -1647,6 +1661,7 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
       <div class="tags"><span class="pill" id="pRole">TEKNISI</span><span class="pill" id="pStatus">AKTIF</span><span class="pill" id="pAbsen">-</span></div>
     </div>
 
+    <div id="akIkrSum" class="stack" style="gap:16px">
     <div>
       <h3 style="margin:4px 2px 10px">Progres hari ini</h3>
       <div class="stats">
@@ -1675,6 +1690,34 @@ details.set .in-body{padding:0 18px 18px;display:grid;gap:12px}
     <div class="card">
       <h3>Total sepanjang waktu</h3>
       <p style="margin:8px 0 0;font-size:15px"><b id="sRepTot">0</b> report · <b id="sKabTot">0</b> m kabel · bergabung <span id="sJoin">-</span></p>
+    </div>
+    </div>
+
+    <div id="akPrgSum" class="stack" style="gap:16px" hidden>
+      <div>
+        <h3 style="margin:4px 2px 10px">Progres pembangunan / civil</h3>
+        <div class="stats">
+          <div class="stat"><span>Report hari ini</span><b id="gRepHari">0</b><i>Daily Report Progress</i></div>
+          <div class="stat"><span>Report bulan ini</span><b id="gRepBln">0</b><i id="gBlnLbl">-</i></div>
+        </div>
+      </div>
+      <div class="card stack">
+        <div class="row"><h3>Summary proyek</h3><span class="spacer"></span><span class="pill e" id="gTglAkhir">-</span></div>
+        <div id="gProyek" class="seg"></div>
+        <div id="gSum" class="stack" style="gap:14px"></div>
+        <div class="stack" style="gap:6px;border-top:1px solid var(--line);padding-top:12px">
+          <div class="row"><b style="font-size:14px">Kehadiran bulan ini</b><span class="spacer"></span><span class="sub mono" id="gHadir">0 / 0 hari</span></div>
+          <div class="bar"><div id="gHadirBar" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row"><h3>7 hari terakhir</h3><span class="spacer"></span><span class="sub">batang = report progress · titik hijau = absen</span></div>
+        <div id="gWeek" class="week"></div>
+      </div>
+      <div class="card">
+        <h3>Total sepanjang waktu</h3>
+        <p style="margin:8px 0 0;font-size:15px"><b id="gRepTot">0</b> report progress · <b id="gProyekTot">0</b> proyek (stasiun / PO)</p>
+      </div>
     </div>
 
     <details class="set">
@@ -1793,6 +1836,7 @@ function tampil(){
   if (!login && tab === 'akun') muatRingkasan().catch(() => {});
   if (!login && S.me && tab === 'absen') muatAbsensi().catch(() => {});
   if (!login && S.me && tab === 'report'){ if (punya('IKR')) muatRiwayat().catch(() => {}); if (punya('PROGRES')) muatProgres().catch(() => {}); }
+  if (!login && S.me && tab === 'akun' && punya('PROGRES')) muatProgres().catch(() => {});
   if (!login && S.me && tab === 'finance'){ $('#finDot').hidden = true; muatKasbon().catch(() => {}); }
   if (!login && tab === 'absen'){ renderAbsen(); if (S.map) setTimeout(() => { S.map.invalidateSize(); petaUpdate(); }, 60); }
   window.scrollTo(0, 0);
@@ -1826,7 +1870,7 @@ function isiProfil(){
   $('#sJoin').textContent = new Intl.DateTimeFormat('id-ID', {timeZone:TZ, month:'long', year:'numeric'}).format(new Date(m.created_at));
 }
 async function muatRingkasan(){
-  const r = await rpc('ringkasan_saya', {});
+  const r = await rpc('ringkasan_saya', {}); S.ring = r; renderAkunPrg();
   $('#sRepHari').textContent = r.report_hari_ini;
   $('#sKabHari').innerHTML = `${fmtM(r.kabel_hari_ini)}<small> m</small>`;
   $('#sRepBln').textContent = r.report_bulan_ini;
@@ -2124,6 +2168,7 @@ const punya = j => ((S.me && S.me.pekerjaan) || ['IKR']).includes(j);
 function aturJenis(){
   const dua = punya('IKR') && punya('PROGRES');
   $('#repJenis').hidden = !dua;
+  $('#akIkrSum').hidden = !punya('IKR'); $('#akPrgSum').hidden = !punya('PROGRES');
   let j = ls('st_rep_jenis');
   if (!punya(j)) j = punya('IKR') ? 'IKR' : 'PROGRES';
   pilihJenis(j);
@@ -2212,8 +2257,47 @@ $('#fPrg').addEventListener('submit', e => {
 async function muatProgres(awal){
   S.progres = await rpc('progres_saya', {});
   if (awal && !ls(draftKey()) && S.progres.length && S.prg){ S.prg = prgDari(S.progres[0]); prgTulis(); }
-  renderProgres();
+  renderProgres(); renderAkunPrg();
 }
+/* summary progress untuk menu Akun (akun pembangunan / civil) */
+S.prgProyek = null;
+function renderAkunPrg(){
+  if (!S.me || !punya('PROGRES')) return;
+  const P = S.progres || [], t = hariIni(), bln = t.slice(0, 7), r = S.ring;
+  $('#gRepHari').textContent = P.filter(x => x.tanggal === t).length;
+  $('#gRepBln').textContent = P.filter(x => String(x.tanggal).slice(0, 7) === bln).length;
+  $('#gBlnLbl').textContent = new Intl.DateTimeFormat('id-ID', {timeZone:TZ, month:'long', year:'numeric'}).format(new Date());
+  // proyek = stasiun + PO; ambil report terbaru per proyek
+  const proyek = []; const seen = new Set();
+  P.forEach(x => { const k = `${x.stasiun}|${x.no_po || ''}`; if (!seen.has(k)){ seen.add(k); proyek.push({k, x}); } });
+  $('#gRepTot').textContent = P.length; $('#gProyekTot').textContent = proyek.length;
+  if (!proyek.some(p => p.k === S.prgProyek)) S.prgProyek = proyek.length ? proyek[0].k : null;
+  $('#gProyek').innerHTML = proyek.length > 1 ? proyek.map(p => `<button type="button" data-k="${esc(p.k)}" aria-pressed="${p.k === S.prgProyek}">${esc(p.x.stasiun)}${p.x.no_po ? ' · ' + esc(p.x.no_po) : ''}</button>`).join('') : '';
+  const cur = proyek.find(p => p.k === S.prgProyek);
+  if (!cur){ $('#gTglAkhir').textContent = '-'; $('#gSum').innerHTML = '<p class="empty">Belum ada report progress. Isi di menu Report.</p>'; }
+  else {
+    const x = cur.x, pct = (rl, tg) => tg ? Math.max(0, Math.min(100, Math.round(rl / tg * 100))) : null;
+    $('#gTglAkhir').textContent = 'Update ' + tglSlash(x.tanggal);
+    const bar = (nama, a) => { const tg = a ? a[0] : null, rl = a ? a[1] : null; if (tg == null && rl == null) return '';
+      const p = pct(rl || 0, tg); return `<div class="pb${p === 100 ? ' done' : ''}"><div class="pb-h"><b>${esc(nama)}</b><span>${rl ?? 0}${tg != null ? ' / ' + tg : ''}${p != null ? ` · ${p}%` : ''}</span></div><div class="pb-t"><i style="width:${p ?? 0}%"></i></div></div>`; };
+    let grup = null;
+    const items = (x.items || []).map(it => { const g = (it.grup || '').trim(); const h = g && g !== grup ? `<div class="pb-g">${esc(g)}</div>` : ''; grup = g || null; return h + bar(it.nama, [it.target, it.realisasi]); }).join('');
+    $('#gSum').innerHTML = `<div><b style="font-size:17px">${esc(x.stasiun)}</b>${x.no_po ? ` <span class="sub mono">PO ${esc(x.no_po)}</span>` : ''}${x.segmen ? `<br><span class="sub">${esc(x.segmen)}</span>` : ''}</div>
+      <div class="hp3"><div><span>HP PO</span><b>${esc(x.hp_po || '-')}</b></div><div><span>HP Pembangunan</span><b>${esc(x.hp_pembangunan || '-')}</b></div><div><span>HP RFS</span><b>${esc(x.hp_rfs || '-')}</b></div></div>
+      ${bar('OTB', x.otb)}${bar('ODC', x.odc)}${bar('ODP', x.odp)}
+      ${items ? `<div class="pb-g" style="margin-top:6px;color:var(--ink);font-size:12px">Total progress</div>${items}` : ''}
+      ${x.remark ? `<div class="note" style="background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:13px"><b>Remark terakhir:</b> ${esc(x.remark)}</div>` : ''}`;
+  }
+  if (r){
+    $('#gHadir').textContent = `${r.absen_bulan_ini} / ${r.hari_bulan_ini} hari`;
+    $('#gHadirBar').style.width = Math.min(100, Math.round(r.absen_bulan_ini / Math.max(1, r.hari_bulan_ini) * 100)) + '%';
+    const H = r.harian.map(h => ({...h, n:P.filter(x => x.tanggal === h.tanggal).length})), max = Math.max(1, ...H.map(h => h.n)), hariLbl = new Intl.DateTimeFormat('id-ID', {timeZone:'UTC', weekday:'short'});
+    $('#gWeek').innerHTML = H.map((h, i) => `<div class="col${i === H.length - 1 ? ' today' : ''}"><span class="val">${h.n}</span>
+      <div class="track"><div class="fill" style="height:${Math.round(h.n / max * 100)}%"></div></div>
+      <span class="day">${i === H.length - 1 ? 'Hari ini' : hariLbl.format(new Date(h.tanggal + 'T00:00:00Z'))}</span><span class="dot${h.absen ? ' on' : ''}"></span></div>`).join('');
+  }
+}
+$('#gProyek').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b){ S.prgProyek = b.dataset.k; renderAkunPrg(); } });
 function renderProgres(){
   const q = $('#prgCari').value.trim().toLowerCase();
   const rows = q ? S.progres.filter(x => `${x.stasiun} ${x.no_po || ''}`.toLowerCase().includes(q)) : S.progres;
