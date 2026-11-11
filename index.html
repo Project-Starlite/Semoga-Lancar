@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0B1B3F">
-<meta name="starlite-build" content="20261110173111">
+<meta name="starlite-build" content="20261111141523">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%230B1B3F%27/%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%2748%27%20height%3D%2748%27%20rx%3D%2712%27%20fill%3D%27%232F6BFF%27/%3E%3Cpath%20d%3D%27M32%2014l4.8%2011.6L48%2030l-11.2%204.4L32%2046l-4.8-11.6L16%2030l11.2-4.4z%27%20fill%3D%27%23fff%27/%3E%3C/svg%3E">
 <title>STARLITE Technician App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -570,7 +570,7 @@ const S = {token:null, me:null, stat:null, abs:[], lap:[], akun:[], lokasi:[], c
 async function rpc(name, params){
   const {data, error} = await sb.rpc(name, {p_token:S.token, ...params});
   if (error){ if (/Sesi berakhir|Hanya (Super Admin|Boss Ridho)/.test(error.message)) keluar(true); throw error; }
-  if (/^admin_(hapus|ubah|kasbon_proses|set_aktif|simpan_akun)/.test(name)) kabar('admin');
+  if (/^admin_(hapus|ubah|kasbon_proses|set_aktif|simpan_akun|set_pekerjaan)/.test(name)) kabar('admin');
   return data;
 }
 
@@ -691,6 +691,7 @@ async function muatRingkasan(diam){
     const [st, lap, abs, prg] = await Promise.all([rpc('admin_statistik', {p_hari:14}), rpc('admin_laporan', {p_dari:t, p_sampai:t}), rpc('admin_absensi', {p_dari:t, p_sampai:t}),
       rpc('admin_progres', {p_dari:'2000-01-01', p_sampai:t}).catch(() => [])]);
     S.prgSemua = prg; S.prgHari = prg.filter(x => x.tanggal === t);
+    S.pel = await rpc('admin_pelanggan', {}).catch(() => null);
     S.stat = st; renderRingkasan(lap, abs); stempel();
   } catch(e){ if (!diam) err(e); }
 }
@@ -710,7 +711,9 @@ function renderRingkasan(lap, abs){
     kpi('Pelanggan aktivasi hari ini', s.report_hari_ini, 't-e', 'today', trend(rep[n - 1], rep[n - 2]) + ` · ${fmtM(s.kabel_hari_ini)} m kabel`, sparkSvg(rep)),
     kpi('Kasbon menunggu', wait.length ? fRp(sum(wait)) : 'Rp0', 't-warn', 'kas', `${wait.length} pengajuan perlu persetujuan${acc.length ? ` · ${acc.length} siap transfer` : ''}`),
     kpi('Ditransfer bulan ini', fRp(sum(trf)), 't-v', 'trf', `${trf.length} transfer kasbon`),
-    kpi('Total report', Number(s.report_total).toLocaleString('id-ID'), 't-e', 'rep', 'seluruh waktu')
+    S.pel ? kpi('Total pelanggan aktivasi', Number(S.pel.total).toLocaleString('id-ID'), 't-v', 'tek',
+        `<b>${Number(S.pel.bulan_ini).toLocaleString('id-ID')}</b> pelanggan baru bulan ini · ${Number(S.pel.report).toLocaleString('id-ID')} report`, sparkSvg(S.pel.per_bulan.map(x => x.jumlah)))
+      : kpi('Total report', Number(s.report_total).toLocaleString('id-ID'), 't-e', 'rep', 'seluruh waktu')
   ].join('');
   $('#belumN').textContent = belum ? `${belum} teknisi` : '';
   $('#belum').innerHTML = belum ? s.belum_absen.map(n => `<span class="avchip">${avatar(n)}${esc(n)}</span>`).join('') : '<span class="pill ok">Semua teknisi sudah absen hari ini</span>';
@@ -1256,7 +1259,9 @@ function detailKasbon(k){
       </div>
       <p class="sub">Setelah ditandai, status &amp; bukti transfer otomatis muncul di APK teknisi dan masuk history transfer.</p>
     </div>` : ''}
-    <div class="row"><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus data</button></div>`);
+    ${k.diedit_at ? `<p class="sub" style="margin:0">Diedit oleh ${esc(k.diedit_oleh || 'Boss Ridho')} · ${esc(fWaktuD(k.diedit_at))}</p>` : ''}
+    <div class="row"><button class="btn sm" type="button" data-editkas>Edit kasbon</button><span class="spacer"></span><button class="btn sm" type="button" data-hapus style="color:var(--bad)">Hapus data</button></div>`);
+  $('#panel [data-editkas]').addEventListener('click', () => editKasbon(k));
   $('#panel [data-copy]').addEventListener('click', async () => { try { await navigator.clipboard.writeText(k.no_rek); toast('Nomor rekening disalin: ' + k.no_rek); } catch(_){ toast(rek, 'info'); } });
   document.querySelectorAll('#panel [data-aksi]').forEach(b => b.addEventListener('click', async () => {
     const aksi = b.dataset.aksi, cat = $('#kCat').value.trim();
@@ -1275,6 +1280,45 @@ function detailKasbon(k){
     const b = e.currentTarget;
     if (b.dataset.yakin !== '1'){ b.dataset.yakin = '1'; b.textContent = 'Klik lagi untuk menghapus'; return; }
     try { await rpc('admin_hapus_kasbon', {p_id:k.id}); tutup(); toast('Data kasbon dihapus.'); await muatKasbon(true); segarFin(); } catch(z){ err(z); }
+  });
+}
+function editKasbon(k){
+  const ST = ['MENUNGGU','DISETUJUI','DITRANSFER','DITOLAK','DIBATALKAN'];
+  panel(`<div class="row"><h2 style="font-size:18px">Edit kasbon</h2><span class="spacer"></span><button class="btn sm" type="button" data-tutup>Tutup</button></div>
+    <p class="sub" style="margin:0">Teknisi: <b>${esc(k.teknisi)}</b> (@${esc(k.username)}) · diajukan ${esc(fWaktuD(k.created_at))}</p>
+    <form id="fEdKas" class="stack" novalidate>
+      <div class="row"><label class="f" style="flex:1">Tanggal pengajuan<input id="ekTgl" type="date" class="in" value="${esc(k.tanggal)}"></label>
+        <label class="f" style="flex:1">Nominal (Rp)<input id="ekNom" class="in mono" inputmode="numeric" value="${Number(k.nominal).toLocaleString('id-ID')}"></label></div>
+      <label class="f">Keperluan<textarea id="ekKep" class="in" rows="2" maxlength="300">${esc(k.keperluan)}</textarea></label>
+      <div class="row"><label class="f" style="flex:1">Bank / e-wallet<input id="ekBank" class="in" maxlength="40" value="${esc(k.bank)}"></label>
+        <label class="f" style="flex:1">No. rekening<input id="ekRek" class="in mono" maxlength="40" value="${esc(k.no_rek)}"></label></div>
+      <label class="f">Atas nama<input id="ekAn" class="in" maxlength="80" value="${esc(k.atas_nama)}"></label>
+      <label class="f">Status<select id="ekSt" class="in">${ST.map(x => `<option${x === k.status ? ' selected' : ''}>${x}</option>`).join('')}</select></label>
+      <label class="f">Catatan untuk teknisi (wajib jika DITOLAK)<textarea id="ekCat" class="in" rows="2" maxlength="300">${esc(k.catatan || '')}</textarea></label>
+      <div class="stack" style="gap:8px">
+        <b style="font-size:13px">Bukti transfer</b>
+        ${k.bukti_path ? `<div class="row"><a href="${esc(fotoUrl(k.bukti_path))}" target="_blank" rel="noopener"><img src="${esc(fotoUrl(k.bukti_path))}" alt="Bukti transfer" style="width:72px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line)"></a>
+          <label class="ck"><input type="checkbox" id="ekHapusBukti"> Hapus bukti ini</label></div>` : '<span class="sub">Belum ada bukti.</span>'}
+        <label class="f">${k.bukti_path ? 'Ganti dengan foto baru' : 'Unggah bukti'} (opsional)<input id="ekBukti" type="file" accept="image/*" class="in"></label>
+      </div>
+      <p class="sub" style="margin:0">Perubahan langsung terlihat di APK teknisi. Mengubah status ke MENUNGGU mengosongkan tanggal proses; ke DITRANSFER mengisi tanggal transfer.</p>
+      <div class="row"><button class="btn pri" type="submit">Simpan perubahan</button><button class="btn" type="button" data-batal>Batal</button></div>
+    </form>`);
+  $('#ekNom').addEventListener('input', e => { const n = Number(e.target.value.replace(/[^0-9]/g, '')) || 0; e.target.value = n ? n.toLocaleString('id-ID') : ''; });
+  $('#panel [data-batal]').addEventListener('click', () => detailKasbon(k));
+  $('#fEdKas').addEventListener('submit', async e => {
+    e.preventDefault(); const b = e.submitter; b.disabled = true;
+    try {
+      let bukti = k.bukti_path || '';
+      if ($('#ekHapusBukti') && $('#ekHapusBukti').checked) bukti = '';
+      const f = $('#ekBukti').files[0];
+      if (f){ b.innerHTML = '<span class="spin"></span> Mengunggah bukti…'; bukti = await unggahBukti(f); }
+      const r = await rpc('admin_ubah_kasbon', {p_id:k.id, p_tanggal:$('#ekTgl').value || null, p_nominal:Number($('#ekNom').value.replace(/[^0-9]/g, '')) || 0,
+        p_keperluan:$('#ekKep').value.trim(), p_bank:$('#ekBank').value.trim(), p_no_rek:$('#ekRek').value.trim(), p_atas_nama:$('#ekAn').value.trim(),
+        p_status:$('#ekSt').value, p_catatan:$('#ekCat').value.trim(), p_bukti:bukti});
+      const i = S.kasbon.findIndex(x => x.id === k.id); if (i >= 0) S.kasbon[i] = r;
+      toast('Data kasbon diperbarui.'); detailKasbon(r); await muatKasbon(true); segarFin();
+    } catch(x){ err(x); } finally { b.disabled = false; b.textContent = 'Simpan perubahan'; }
   });
 }
 function segarFin(){ const p = halaman(); if (p === 'finance') renderFinance(); if (p === 'ringkasan' && S.stat) renderRingkasan(S.lapHariIni || [], S.absHariIni || []); }
